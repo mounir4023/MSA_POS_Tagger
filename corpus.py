@@ -18,18 +18,27 @@ for s in sents:
         #if re.match(r'^\s+$',t) or t == '':
         if re.match(r'\s+',t):
             s["tokens"].remove(t)
-        if t == '':
+        elif t == '':
             s["tokens"].remove(t)
 
 for s in sents:
     empty = False
     for t in s["tokens"]:
         #if re.match(r'^\s+$',t) or t == '':
-        if re.match(r'\s+',t) or t == '':
+        if re.match(r'\s+',t):
             empty = True
+            print(re.match(r'\s+',t))
             print("num ",s["num"],"token:" ,t)
+        elif t == '':
+            empty = True
+            print('empty')
+            print("num ",s["num"],"token:" ,t)
+
     if empty == True:
         print(s["tokens"])
+
+#print(sents[356]["tokens"][0]=='')
+#print(re.match(r'\s+',sents[356]["tokens"][0]))
 
 """
 for e in root.xpath("/CORPUS/Phrase"):
