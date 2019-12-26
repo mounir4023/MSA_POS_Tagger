@@ -24,6 +24,8 @@ for s in sents:
     for t in s["tokens"]:
         if t == '' or t == ' ':
             print("\nempty char at: ",s["num"])
+        elif len(re.findall(r'\d+',t)):
+            print("\nnumerical char",t," at: ",s["num"])
 
 """
 for s in sents:
