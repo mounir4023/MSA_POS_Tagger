@@ -16,13 +16,16 @@ for s in root.xpath("/CORPUS/Phrase"):
 
 for s in sents:
     for t in s["tokens"]:
-        #if re.match(r'^\s+$',t) or t == '':
-        if re.match(r'[ \t\n\r\f\v]+',t):
-            s["tokens"].remove(t)
-            print("VOID  num ",s["num"],"token:" ,t)
-        elif t == '':
+        if t == '' or t == ' ':
             s["tokens"].remove(t)
 
+
+for s in sents:
+    for t in s["tokens"]:
+        if t == '' or t == ' ':
+            print("\nempty char at: ",s["num"])
+
+"""
 for s in sents:
     empty = False
     for t in s["tokens"]:
@@ -38,6 +41,7 @@ for s in sents:
 
     if empty == True:
         print(s["tokens"],"\n")
+        """
 
 #print(sents[356]["tokens"][0]=='')
 #print(re.match(r'\s+',sents[356]["tokens"][0]))
