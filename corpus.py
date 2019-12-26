@@ -14,12 +14,20 @@ for s in root.xpath("/CORPUS/Phrase"):
         })
 
 for s in sents:
+    for t in s["tokens"]:
+        #if re.match(r'^\s+$',t) or t == '':
+        if re.match(r'\s+',t):
+            s["tokens"].remove(t)
+        if t == '':
+            s["tokens"].remove(t)
+
+for s in sents:
     empty = False
     for t in s["tokens"]:
         #if re.match(r'^\s+$',t) or t == '':
         if re.match(r'\s+',t) or t == '':
             empty = True
-            print("- ",t)
+            print("num ",s["num"],"token:" ,t)
     if empty == True:
         print(s["tokens"])
 
