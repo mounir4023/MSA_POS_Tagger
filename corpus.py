@@ -18,21 +18,19 @@ for s in sents:
         #if re.match(r'^\s+$',t) or t == '':
         if re.match(r'\s+',t):
             s["tokens"].remove(t)
+            print("VOID  num ",s["num"],"token:" ,t)
         elif t == '':
             s["tokens"].remove(t)
 
 for s in sents:
     empty = False
     for t in s["tokens"]:
-        #if re.match(r'^\s+$',t) or t == '':
         if re.match(r'\s+',t):
             empty = True
-            print(re.match(r'\s+',t))
-            print("num ",s["num"],"token:" ,t)
+            print("VOID  num ",s["num"],"token:" ,t)
         elif t == '':
             empty = True
-            print('empty')
-            print("num ",s["num"],"token:" ,t)
+            print("EMPTY num ",s["num"],"token:" ,t)
 
     if empty == True:
         print(s["tokens"])
