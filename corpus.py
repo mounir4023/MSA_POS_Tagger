@@ -19,14 +19,32 @@ for s in sents:
         if t == '' or t == ' ':
             s["tokens"].remove(t)
 
-for s in sents:
-    if s["tokens"][-1] == '.':
-        print(".")
-    elif s["tokens"][-1] == '؟':
-        print("؟")
+"""
+for s in sents[10:15]:
+    print(s["tokens"])
+    print("start: ",s["tokens"][0]," end: ",s["tokens"][-1])
+    pass
+print(" ")
+
+for sent in sents[10:15]:
+    #if sent["tokens"][-1] == ['؟']:
+        #sent["tokens"] = reversed(sent["tokens"]) 
+        #pass
+    #else:
+    #elif sent["tokens"][-1] == ['.']:
+        sent["tokens"][:-1] = reversed(sent["tokens"][:-1]) 
+
+for s in sents[10:15]:
+    print(s["tokens"])
+    print("start: ",s["tokens"][0]," end: ",s["tokens"][-1])
+    pass
+"""
 
 for s in sents:
-    print(s["tokens"][-4:])
+    if s["tokens"][-1] == '؟':
+        print(s["tokens"])
+        print("start: ",s["tokens"][0]," end: ",s["tokens"][-1])
+
 
 
 """
