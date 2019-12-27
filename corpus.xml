@@ -8224,8 +8224,7 @@
     <Num_phrase>892</Num_phrase>
     <Text> تزامن القرار مع قضيتي البرقع والغجر .
 </Text>
-    <Tokenisation>
-تزامن ال قرار مع قضي تي البرقع و الغجر.</Tokenisation>
+    <Tokenisation>تزامن ال قرار مع قضي تي البرقع و الغجر .</Tokenisation>
     <POS_Tag>NULL PVERB DEF NOUN_MS_NOMIN PREP NOUN SUFF_F_D_GTIV PNOUN_GTIV CONJ PNOUN_GTIV PUNC</POS_Tag>
     <Nb_Mot>7</Nb_Mot>
     <Nb_Token>12</Nb_Token>

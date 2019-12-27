@@ -6,8 +6,6 @@ root = etree.parse("corpus.xml")
 sents = [ ]
 
 for s in root.xpath("/CORPUS/Phrase"):
-    #tokens = re.sub(r'[.]',r' [.] ',s[2].text)
-    #tokens = re.sub(r'\s+',' ',tokens)
     tokens = re.sub(r'\s+',' ',s[2].text)
     tags = re.sub(r'\s+',' ',s[3].text)
     sents.append({
@@ -29,17 +27,10 @@ for s in sents:
     if len(s["tokens"]) != len(s["tags"]) -1 :
         print(s["num"])
 
+print(sents[892]["raw"])
 print(sents[892]["tokens"])
 print(sents[892]["tags"])
 
-print(sents[3581]["tokens"])
-print(sents[3581]["tags"])
-
-print(sents[3582]["tokens"])
-print(sents[3582]["tags"])
-
-print(sents[3583]["tokens"])
-print(sents[3583]["tags"])
 """
 s = sents[20]
 print(s["tags"])
