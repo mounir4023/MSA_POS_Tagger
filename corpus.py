@@ -27,10 +27,6 @@ for s in sents:
     if len(s["tokens"]) != len(s["tags"]) -1 :
         print(s["num"])
 
-print(sents[892]["raw"])
-print(sents[892]["tokens"])
-print(sents[892]["tags"])
-
 """
 s = sents[20]
 print(s["tags"])
