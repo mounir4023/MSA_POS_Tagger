@@ -33,11 +33,47 @@ for s in sents:
     s["tags"][0:2] = s["tags"][1:2]
 
 
+# global counts 
+mini_sents = sents[0:100]
+all_words = [ ]
+all_tags = [ ]
+for s in mini_sents:
+    for w in s["tokens"]:
+        all_words.append(w)
+    for t in s["tags"]:
+        all_tags.append(t)
+
+print(len(all_words))
+print(len(all_tags))
+distinct_words = set(all_words)
+distinct_tags = set(all_tags)
+print(len(distinct_words))
+print(len(distinct_tags))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
 # random test
 import random
 s = random.choice(sents)
-s = sents[3895]
 print(s["num"])
-print(s["len"])
 for i in range(0,int(s["len"])):
     print(s["tokens"][i],"\t",s["tags"][i])
+"""
