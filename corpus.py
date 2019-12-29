@@ -39,15 +39,31 @@ for s in sents:
 # global counts 
 mini_sents = sents[0:100]
 all_words = [ ]
+all_emissions = [ ]
 all_tags = [ ]
+all_bigrams = [ ]
+all_trigrams = [ ]
 all_starts = [ ]
 all_ends = [ ]
+all_starts_bigram = [ ]
+all_ends_bigram = [ ]
 for s in mini_sents:
     for i in range(0,s["len"]):
-        all_words.append(s["tokens"][i])
-        all_tags.append(s["tags"][i])
+        w = s["tokens"][i]
+        t = s["tags"][i]
+        all_words.append( w )
+        all_emissions.append( (t,w) )
+        all_tags.append( t )
+        if i>0:
+            prev = s["tags"][i-1]
+            all_bigrams.append( (prev,t) )
+            if i>1:
+                prevprev = s["tags"][i-2]
+                all_trigrams.append( (prevprev,prev,t) )
     all_starts.append(s["tags"][0])
     all_ends.append(s["tags"][-1])
+    all_starts_bigram.append( (s["tags"][0],s["tags"][1]) )
+    all_ends_bigram.append( (s["tags"][-2],s["tags"][-1]) )
 distinct_words = set(all_words)
 distinct_tags = set(all_tags)
 distinct_starts = set(all_starts)
@@ -56,6 +72,25 @@ distinct_ends = set(all_ends)
 # unigrams: occurences = fd["tag"] / proba = fd.freq("tag")
 tags_unigram = nltk.FreqDist(all_tags)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
 #print(tags_unigram.freq("NOUN"))
 for t in list(distinct_tags)[:10]:
     print("occurences: ", tags_unigram[t]," / ",len(all_words))
@@ -63,21 +98,7 @@ for t in list(distinct_tags)[:10]:
     print(tags_unigram[t]/len(all_words) == tags_unigram.freq(t))
 
 print(tags_unigram.N() == len(all_words) )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+"""
 
 
 
