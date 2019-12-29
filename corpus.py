@@ -112,24 +112,58 @@ def possible_tags(k):
         return list(set(all_tags))
 
 
-print(possible_tags(-2))
-print(possible_tags(-1))
-print(possible_tags(0))
-print(possible_tags(1))
-print(possible_tags(2))
+# sentence to decode
+s = sents[4023]
 
+# init
+pi = { (-1,'*','*'): 1 }
+bp = { }
+n = s["len"]-1
+decoded = ['*' for i in range(0,s["len"]) ]
 
+# decoding
+for i in range(0,s["len"]):
 
+    for u in possible_tags(i):
+        for v in possible_tags(i-1):
 
+            w = possible_tags(i-2)[0]
+            pi[ (i,v,u) ] = pi [ (i-1,v,w) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
 
+            for w in possible_tags(i-2)[1:]:
+                tmp = pi [ (i-1,v,w) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
+                if tmp > pi [ (i,v,u) ] :
+                    pi[ (i,v,u) ] = tmp
+                    bp[ (i,v,u) ] = w
 
+for u in possible_tags(n):
+    
+    v = possible_tags(n-1)[0]
+    max_uv_end = pi[ (n,v,u) ] * tri_transition(v,u,'STOP')
+    decoded[n] = u
+    if n>0:
+        decoded[n-1] = v
+
+    for v in possible_tags(n-1)[1:]:
+        tmp = pi[ (n,v,u) ] * tri_transition(v,u,'STOP')
+        if tmp > max_uv_end:
+            max_uv_end = tmp
+            decoded[n] = u
+            if n>0:
+                decoded[n-1] = v
+
+for k in [ i-2 for i in range(2,n) ] :
+    decoded[k] = bp [ (k+2, decoded[k+1], decoded[k+2] ) ]
+        
+
+for i in range(0,s["len"]):
+    print("token ",s["tokens"][i]," original ",s["tags"][i], " predicted ",decoded[i])
 
 
 
 
 
 """
-
 for t in list(tag_set):
     try:
         print(tri_transition(t,'PUNC','STOP'))
@@ -197,11 +231,8 @@ print(emission('DEF','ال'))
 0.96
 print(emission('PUNC','.'))
 1.
-"""
 
 
-
-"""
 distinct_words = set(all_words)
 distinct_tags = set(all_tags)
 distinct_starts = set(all_starts)
@@ -213,9 +244,9 @@ for t in list(distinct_tags)[:10]:
     print(tags_unigram[t]/len(all_words) == tags_unigram.freq(t))
 
 print(tags_unigram.N() == len(all_words) )
-"""
 
-"""
+
+
 # random test
 import random
 s = random.choice(sents)
@@ -223,3 +254,10 @@ print(s["num"])
 for i in range(0,int(s["len"])):
     print(s["tokens"][i],"\t",s["tags"][i])
 """
+
+
+
+
+
+
+
