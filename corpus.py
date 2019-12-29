@@ -98,7 +98,7 @@ def tri_transition(prevprev, prev, t):
     elif prevprev == '*':
         return fd_starts_bigram[(prev,t)] / len(all_starts_bigram) 
     elif t == 'STOP':
-        return fd_ends_bigram[(prevprev)] / fd_bigrams[(prevprev,prev)]
+        return fd_ends_bigram[(prevprev,prev)] / fd_bigrams[(prevprev,prev)]
     else:
         return fd_trigrams[(prevprev,prev,t)] / fd_bigrams[(prevprev,prev)]
 
@@ -114,10 +114,13 @@ for i in range(0,s["len"]):
 
 print(" ")
 print("start tag: ",bi_transition('*',tags[0]))
+print("start tag2: ",tri_transition('*','*',tags[0]))
 print("start bigram: ",tri_transition('*',tags[0],tags[1]))
 print("end tag: ",bi_transition(tags[-1],'STOP'))
-print("end bigram: ",tri_transition(tags[0],tags[1],'STOP'))
+print("end bigram: ",tri_transition(tags[-2],tags[-1],'STOP'))
 
+print("sample end bigram: ",tags[-2]," ",tags[-1]," ",fd_ends_bigram[(tags[-2],tags[-1])])
+print("sample end bigram all occurences: ",fd_bigrams[(tags[-2],tags[-1])])
 
 
 
