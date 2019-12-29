@@ -53,10 +53,16 @@ distinct_tags = set(all_tags)
 distinct_starts = set(all_starts)
 distinct_ends = set(all_ends)
 
-# unigrams: occurences = fd["tag"] / proba = fd.freq["tag"]
+# unigrams: occurences = fd["tag"] / proba = fd.freq("tag")
 tags_unigram = nltk.FreqDist(all_tags)
 
-print(tags_unigram["PUNC"])
+#print(tags_unigram.freq("NOUN"))
+for t in list(distinct_tags)[:10]:
+    print("occurences: ", tags_unigram[t]," / ",len(all_words))
+    print("probability: ", tags_unigram.freq(t))
+    print(tags_unigram[t]/len(all_words) == tags_unigram.freq(t))
+
+print(tags_unigram.N() == len(all_words) )
 
 
 
