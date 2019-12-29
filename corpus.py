@@ -37,7 +37,7 @@ for s in sents:
         print("LENGTH ERROR IN SENTENCE: ",s["num"])
 
 # global counts 
-mini_sents = sents[0:100]
+mini_sents = sents[:]
 all_words = [ ]
 all_emissions = [ ]
 all_tags = [ ]
@@ -65,9 +65,10 @@ for s in mini_sents:
     all_starts_bigram.append( (s["tags"][0],s["tags"][1]) )
     all_ends_bigram.append( (s["tags"][-2],s["tags"][-1]) )
 
-# sets & lengths
+# sets lengths
 word_set = set(all_words)
 tag_set = set(all_tags)
+corpus_size = len(all_starts)
 
 # freq dists
 fd_words = nltk.FreqDist(all_words)
@@ -80,13 +81,13 @@ fd_ends = nltk.FreqDist(all_ends)
 fd_starts_bigram = nltk.FreqDist(all_starts_bigram)
 fd_ends_bigram = nltk.FreqDist(all_ends_bigram)
 
-# emission
+# HMM
 def emission(t, w):
     return fd_emissions[(t,w)] / fd_tags[t]
 
 def bi_transition(prev, t):
     if prev == '*':
-        return fd_starts[t] / len(all_starts)
+        return fd_starts[t] / corpus_size
     elif t == 'STOP':
         return fd_ends[prev] / fd_tags[prev]
     else:
@@ -94,7 +95,7 @@ def bi_transition(prev, t):
 
 def tri_transition(prevprev, prev, t):
     if prev == '*':
-        return fd_starts[t] / len(all_starts)
+        return fd_starts[t] / corpus_size
     elif prevprev == '*':
         return fd_starts_bigram[(prev,t)] / len(all_starts_bigram) 
     elif t == 'STOP':
@@ -103,8 +104,19 @@ def tri_transition(prevprev, prev, t):
         return fd_trigrams[(prevprev,prev,t)] / fd_bigrams[(prevprev,prev)]
 
 
+# Viterbi
+def possible_tags(k):
+    if k == -1 or k == -2:
+        return ['*']
+    else: 
+        return list(set(all_tags))
 
 
+print(possible_tags(-2))
+print(possible_tags(-1))
+print(possible_tags(0))
+print(possible_tags(1))
+print(possible_tags(2))
 
 
 
