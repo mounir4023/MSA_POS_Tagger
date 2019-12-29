@@ -66,7 +66,7 @@ for s in mini_sents:
     all_ends_bigram.append( (s["tags"][-2],s["tags"][-1]) )
 
 # sets & lengths
-words_set = set(all_words)
+word_set = set(all_words)
 tag_set = set(all_tags)
 
 # freq dists
@@ -94,24 +94,85 @@ def bi_transition(prev, t):
 
 def tri_transition(prevprev, prev, t):
     if prev == '*':
-        return fd_start[t] / len(all_starts)
+        return fd_starts[t] / len(all_starts)
     elif prevprev == '*':
         return fd_starts_bigram[(prev,t)] / len(all_starts_bigram) 
+    elif t == 'STOP':
+        return fd_ends_bigram[(prevprev)] / fd_bigrams[(prevprev,prev)]
     else:
         return fd_trigrams[(prevprev,prev,t)] / fd_bigrams[(prevprev,prev)]
 
 
+s = sents[10]
+tags = s["tags"]
+tokens = s["tokens"]
 
+for i in range(0,s["len"]):
+    #print("w|t ",emission(tags[i],tokens[i]))
+    print("\n position: ",i)
+    print("emission: ",emission(tags[i],tokens[i]))
+
+print(" ")
+print("start tag: ",bi_transition('*',tags[0]))
+print("start bigram: ",tri_transition('*',tags[0],tags[1]))
+print("end tag: ",bi_transition(tags[-1],'STOP'))
+print("end bigram: ",tri_transition(tags[0],tags[1],'STOP'))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+s = sents[0]
+tags = s["tags"]
+tokens = s["tokens"]
+
+for i in range(0,s["len"]):
+    print("w|t ",emission(tags[i],tokens[i]))
+
+# all > 0 correct
+
+for t in list(tag_set):
+    try:
+        print(tri_transition(t,'PUNC','STOP'))
+        print(t)
+    except:
+        pass
+#some 0 s only
+
+print(tri_transition('CONJ','NN','PUNC'))
+# N / 0 exception
+print(tri_transition('CONJ','DEF','NN'))
+#0.00
+print(tri_transition('*','*','DEF'))
+#0.07
+print(tri_transition('*','*','CONJ'))
+#0.02
+print(bi_transition('*','CONJ'))
+#0.02
+print(bi_transition('*','DEF'))
+#0.07
+print(bi_transition('PUNC','STOP'))
+1.
+print(emission('DEF','ال'))
+0.96
 print(emission('PUNC','.'))
-
-
-
-
-
-
-
-
-
+1.
+"""
 
 
 
@@ -128,10 +189,6 @@ for t in list(distinct_tags)[:10]:
 
 print(tags_unigram.N() == len(all_words) )
 """
-
-
-
-
 
 """
 # random test
