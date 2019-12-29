@@ -116,12 +116,21 @@ def tri_transition(prevprev, prev, t):
 
 
 
-
-
-
-
-
 """
+
+for t in list(tag_set):
+    try:
+        print(tri_transition(t,'PUNC','STOP'))
+        print(t)
+    except:
+        pass
+print(list(tag_set))
+#some 1.0 s and the others were caught in except > all is good
+
+
+print(tri_transition('SUFF_F_S_GTIV','PUNC','STOP'))
+#1
+
 s = sents[10]
 tags = s["tags"]
 tokens = s["tokens"]
