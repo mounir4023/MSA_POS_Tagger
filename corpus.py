@@ -27,7 +27,7 @@ for s in sents:
         if t == '' or t == ' ':
             s["tags"].remove(t)
 
-# removing the begining NULL
+# removing the begining NULL tag
 for s in sents:
     #s["tokens"][0:0] = ['<START>']
     s["tags"][0:2] = s["tags"][1:2]
@@ -64,15 +64,12 @@ for s in mini_sents:
     all_ends.append(s["tags"][-1])
     all_starts_bigram.append( (s["tags"][0],s["tags"][1]) )
     all_ends_bigram.append( (s["tags"][-2],s["tags"][-1]) )
-distinct_words = set(all_words)
-distinct_tags = set(all_tags)
-distinct_starts = set(all_starts)
-distinct_ends = set(all_ends)
 
-# unigrams: occurences = fd["tag"] / proba = fd.freq("tag")
-tags_unigram = nltk.FreqDist(all_tags)
+#fd_words = nltk.FreqDist(all_words)
+fd_emissions = nltk.FreqDist(all_emissions)
+fd_tags = nltk.FreqDist(all_tags)
 
-
+print(fd_emissions.max())
 
 
 
@@ -91,6 +88,10 @@ tags_unigram = nltk.FreqDist(all_tags)
 
 
 """
+distinct_words = set(all_words)
+distinct_tags = set(all_tags)
+distinct_starts = set(all_starts)
+distinct_ends = set(all_ends)
 #print(tags_unigram.freq("NOUN"))
 for t in list(distinct_tags)[:10]:
     print("occurences: ", tags_unigram[t]," / ",len(all_words))
