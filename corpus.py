@@ -65,16 +65,44 @@ for s in mini_sents:
     all_starts_bigram.append( (s["tags"][0],s["tags"][1]) )
     all_ends_bigram.append( (s["tags"][-2],s["tags"][-1]) )
 
-#fd_words = nltk.FreqDist(all_words)
+# sets & lengths
+words_set = set(all_words)
+tag_set = set(all_tags)
+
+# freq dists
+fd_words = nltk.FreqDist(all_words)
 fd_emissions = nltk.FreqDist(all_emissions)
 fd_tags = nltk.FreqDist(all_tags)
+fd_bigrams = nltk.FreqDist(all_bigrams)
+fd_trigrams = nltk.FreqDist(all_trigrams)
+fd_starts = nltk.FreqDist(all_starts)
+fd_ends = nltk.FreqDist(all_ends)
+fd_starts_bigram = nltk.FreqDist(all_starts_bigram)
+fd_ends_bigram = nltk.FreqDist(all_ends_bigram)
 
-print(fd_emissions.max())
+# emission
+def emission(t, w):
+    return fd_emissions[(t,w)] / fd_tags[t]
+
+def bi_transition(prev, t):
+    if prev == '*':
+        return fd_starts[t] / len(all_starts)
+    elif t == 'STOP':
+        return fd_ends[prev] / fd_tags[prev]
+    else:
+        return fd_bigrams[(prev,t)] / fd_tags[prev]
+
+def tri_transition(prevprev, prev, t):
+    if prev == '*':
+        return fd_start[t] / len(all_starts)
+    elif prevprev == '*':
+        return fd_starts_bigram[(prev,t)] / len(all_starts_bigram) 
+    else:
+        return fd_trigrams[(prevprev,prev,t)] / fd_bigrams[(prevprev,prev)]
 
 
 
-
-
+print(emission('PUNC','.'))
 
 
 
