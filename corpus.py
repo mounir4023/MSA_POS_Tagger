@@ -103,24 +103,6 @@ def tri_transition(prevprev, prev, t):
         return fd_trigrams[(prevprev,prev,t)] / fd_bigrams[(prevprev,prev)]
 
 
-s = sents[10]
-tags = s["tags"]
-tokens = s["tokens"]
-
-for i in range(0,s["len"]):
-    #print("w|t ",emission(tags[i],tokens[i]))
-    print("\n position: ",i)
-    print("emission: ",emission(tags[i],tokens[i]))
-
-print(" ")
-print("start tag: ",bi_transition('*',tags[0]))
-print("start tag2: ",tri_transition('*','*',tags[0]))
-print("start bigram: ",tri_transition('*',tags[0],tags[1]))
-print("end tag: ",bi_transition(tags[-1],'STOP'))
-print("end bigram: ",tri_transition(tags[-2],tags[-1],'STOP'))
-
-print("sample end bigram: ",tags[-2]," ",tags[-1]," ",fd_ends_bigram[(tags[-2],tags[-1])])
-print("sample end bigram all occurences: ",fd_bigrams[(tags[-2],tags[-1])])
 
 
 
@@ -140,6 +122,25 @@ print("sample end bigram all occurences: ",fd_bigrams[(tags[-2],tags[-1])])
 
 
 """
+s = sents[10]
+tags = s["tags"]
+tokens = s["tokens"]
+
+for i in range(0,s["len"]):
+    #print("w|t ",emission(tags[i],tokens[i]))
+    print("\n position: ",i)
+    print("emission: ",emission(tags[i],tokens[i]))
+
+print(" ")
+print("start tag: ",bi_transition('*',tags[0]))
+print("start tag2: ",tri_transition('*','*',tags[0]))
+print("start bigram: ",tri_transition('*',tags[0],tags[1]))
+print("end tag: ",bi_transition(tags[-1],'STOP'))
+print("end bigram: ",tri_transition(tags[-2],tags[-1],'STOP'))
+print("sample end bigram: ",tags[-2]," ",tags[-1]," ",fd_ends_bigram[(tags[-2],tags[-1])])
+print("sample end bigram all occurences: ",fd_bigrams[(tags[-2],tags[-1])])
+
+
 s = sents[0]
 tags = s["tags"]
 tokens = s["tokens"]
