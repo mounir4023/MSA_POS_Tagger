@@ -1,6 +1,6 @@
 from lxml import etree
 import re
-
+import nltk
 
 # reading corpus from xml
 root = etree.parse("corpus.xml")
@@ -27,28 +27,36 @@ for s in sents:
         if t == '' or t == ' ':
             s["tags"].remove(t)
 
-# adding the START state
+# removing the begining NULL
 for s in sents:
     #s["tokens"][0:0] = ['<START>']
     s["tags"][0:2] = s["tags"][1:2]
-
+    if len(s["tags"]) == len(s["tokens"]):
+        s["len"] = len(s["tags"])
+    else:
+        print("LENGTH ERROR IN SENTENCE: ",s["num"])
 
 # global counts 
 mini_sents = sents[0:100]
 all_words = [ ]
 all_tags = [ ]
+all_starts = [ ]
+all_ends = [ ]
 for s in mini_sents:
-    for w in s["tokens"]:
-        all_words.append(w)
-    for t in s["tags"]:
-        all_tags.append(t)
-
-print(len(all_words))
-print(len(all_tags))
+    for i in range(0,s["len"]):
+        all_words.append(s["tokens"][i])
+        all_tags.append(s["tags"][i])
+    all_starts.append(s["tags"][0])
+    all_ends.append(s["tags"][-1])
 distinct_words = set(all_words)
 distinct_tags = set(all_tags)
-print(len(distinct_words))
-print(len(distinct_tags))
+distinct_starts = set(all_starts)
+distinct_ends = set(all_ends)
+
+# unigrams: occurences = fd["tag"] / proba = fd.freq["tag"]
+tags_unigram = nltk.FreqDist(all_tags)
+
+print(tags_unigram["PUNC"])
 
 
 
