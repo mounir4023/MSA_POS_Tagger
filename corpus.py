@@ -128,7 +128,7 @@ for i in range(0,s["len"]):
         for v in possible_tags(i-1):
 
             w = possible_tags(i-2)[0]
-            pi[ (i,v,u) ] = pi [ (i-1,v,w) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
+            pi[ (i,v,u) ] = pi [ (i-1,w,v) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
 
             for w in possible_tags(i-2)[1:]:
                 tmp = pi [ (i-1,v,w) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
