@@ -41,7 +41,7 @@ for s in sents:
         print("LENGTH ERROR IN SENTENCE: ",s["num"])
 
 # global counts 
-mini_sents = sents[:200]
+mini_sents = [ random.choice(sents) for i in range(0,500) ]
 all_words = [ ]
 all_emissions = [ ]
 all_tags = [ ]
@@ -132,7 +132,7 @@ def possible_tags(k):
 
 
 # init
-s = sents[0]
+s = random.choice(mini_sents)
 pi = { (-1,'*','*'): 1 }
 bp = { }
 n = s["len"]-1
@@ -152,7 +152,7 @@ for i in range(0,s["len"]):
             bp[ (i,v,u) ] = w
 
             for w in possible_tags(i-2)[1:]:
-                tmp = pi [ (i-1,v,w) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
+                tmp = pi [ (i-1,w,v) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
                 #tmp = pi [ (i-1,v,w) ] * emission(u,s["tokens"][i])
                 #tmp = random.uniform(0,0.001) * random.uniform(1,10)
                 if tmp > pi [ (i,v,u) ] :
