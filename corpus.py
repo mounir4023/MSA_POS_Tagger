@@ -160,6 +160,8 @@ for i in range(0,s["len"]):
                     pi[ (i,v,u) ] = tmp
                     bp[ (i,v,u) ] = w
 
+                print(u," ",v," ",w)
+
 # Yn Yn-1 then Yi 0..n-2
 for u in possible_tags(n):
     
