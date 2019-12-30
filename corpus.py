@@ -154,8 +154,8 @@ for i in range(0,s["len"]):
 for u in possible_tags(n):
     
     v = possible_tags(n-1)[0]
-    #max_uv_end = pi[ (n,v,u) ] * tri_transition(v,u,'STOP')
-    max_uv_end = random.uniform(0,0.001) * random.uniform(1,10)
+    max_uv_end = pi[ (n,v,u) ] * tri_transition(v,u,'STOP')
+    #max_uv_end = random.uniform(0,0.001) * random.uniform(1,10)
     decoded[n] = u
     if n>0:
         decoded[n-1] = v
