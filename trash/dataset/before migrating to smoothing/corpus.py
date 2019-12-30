@@ -123,6 +123,9 @@ def possible_tags(k):
         return ['*']
     else: 
         return list(set(all_tags))
+        #return [ sents[0]["tags"][k] ]
+        #return [ tag for tag in list(set(all_tags)) if emission(tag,s["tokens"][k]) > 0 ]
+
 
 # init
 s = random.choice(mini_sents)
@@ -140,13 +143,19 @@ for i in range(0,s["len"]):
 
             w = possible_tags(i-2)[0]
             pi[ (i,v,u) ] = pi [ (i-1,w,v) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
+            #pi[ (i,v,u) ] = pi [ (i-1,w,v) ] * emission(u,s["tokens"][i])
+            #pi[ (i,v,u) ] = random.uniform(0,0.001) * random.uniform(1,10)
             bp[ (i,v,u) ] = w
 
             for w in possible_tags(i-2)[1:]:
                 tmp = pi [ (i-1,w,v) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
+                #tmp = pi [ (i-1,v,w) ] * emission(u,s["tokens"][i])
+                #tmp = random.uniform(0,0.001) * random.uniform(1,10)
                 if tmp > pi [ (i,v,u) ] :
                     pi[ (i,v,u) ] = tmp
                     bp[ (i,v,u) ] = w
+
+                print(u," ",v," ",w)
 
 # Yn Yn-1 then Yi 0..n-2
 for u in possible_tags(n):
