@@ -40,8 +40,8 @@ for s in sents:
         print("LENGTH ERROR IN SENTENCE: ",s["num"])
 
 # global counts 
-mini_sents = [ random.choice(sents) for i in range(0,200) ]
-#mini_sents = sents[:1]
+#mini_sents = [ random.choice(sents) for i in range(0,200) ]
+mini_sents = sents[:1]
 all_words = [ ]
 all_emissions = [ ]
 all_tags = [ ]
