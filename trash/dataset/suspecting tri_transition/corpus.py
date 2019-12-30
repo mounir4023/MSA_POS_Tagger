@@ -2,9 +2,6 @@ from lxml import etree
 import re
 import nltk
 
-
-######################## DATA ##########################
-
 # reading corpus from xml
 root = etree.parse("corpus.xml")
 sents = [ ]
@@ -40,7 +37,7 @@ for s in sents:
         print("LENGTH ERROR IN SENTENCE: ",s["num"])
 
 # global counts 
-mini_sents = sents[:200]
+mini_sents = sents[:500]
 all_words = [ ]
 all_emissions = [ ]
 all_tags = [ ]
@@ -84,8 +81,7 @@ fd_ends = nltk.FreqDist(all_ends)
 fd_starts_bigram = nltk.FreqDist(all_starts_bigram)
 fd_ends_bigram = nltk.FreqDist(all_ends_bigram)
 
-######################  HMM  ##########################
-
+# HMM
 def emission(t, w):
     return fd_emissions[(t,w)] / fd_tags[t]
 
@@ -102,29 +98,27 @@ def tri_transition(prevprev, prev, t):
         if prev == '*':
             return fd_starts[t] / corpus_size
         elif prevprev == '*':
-            return fd_starts_bigram[(prev,t)] / corpus_size
+            return fd_starts_bigram[(prev,t)] / len(all_starts_bigram) 
         elif t == 'STOP':
-            if fd_ends_bigram[(prevprev,prev)] == 0:
-                return 0
             return fd_ends_bigram[(prevprev,prev)] / fd_bigrams[(prevprev,prev)]
         else:
-            if fd_trigrams[(prevprev,prev,t)] == 0:
-                return 0
             return fd_trigrams[(prevprev,prev,t)] / fd_bigrams[(prevprev,prev)]
     #except ZeroDivisionError :
         #return 0
 
 
-######################  Viterbi ##########################
-
+# Viterbi
 def possible_tags(k):
     if k == -1 or k == -2:
         return ['*']
     else: 
         return list(set(all_tags))
 
-# init
+
+# sentence to decode
 s = sents[100]
+
+# init
 pi = { (-1,'*','*'): 1 }
 bp = { }
 n = s["len"]-1
@@ -141,8 +135,8 @@ for i in range(0,s["len"]):
             bp[ (i,v,u) ] = w
 
             for w in possible_tags(i-2)[1:]:
-                #tmp = pi [ (i-1,v,w) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
-                tmp = pi [ (i-1,v,w) ] * emission(u,s["tokens"][i])
+                tmp = pi [ (i-1,v,w) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
+                #tmp = pi [ (i-1,v,w) ] * emission(u,s["tokens"][i])
                 #print( pi [ (i,v,u) ] ," ", tmp )
                 if tmp > pi [ (i,v,u) ] :
                     #print(tmp>0)
@@ -167,16 +161,16 @@ for u in possible_tags(n):
                 decoded[n-1] = v
         #print(max_uv_end, decoded)
 
-
-# final test
 print(n," ",s["tokens"][n]," ",s["tags"][n]," ",decoded[n])
+print(n-1," ",s["tokens"][n-1]," ",s["tags"][n-1]," ",decoded[n-1])
+
 for k in reversed(range(0,n-2+1)):
     print(k+1," ",s["tokens"][k+1]," ",s["tags"][k+1]," ",decoded[k+1])
     decoded[k] = bp [ (k+2, decoded[k+1], decoded[k+2] ) ]
         
 
-print(" ")
-print(decoded)
+
+
 
 
 
