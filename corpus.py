@@ -162,7 +162,7 @@ for u in possible_tags(n):
 print(n," ",s["tokens"][n]," ",s["tags"][n]," ",decoded[n])
 print(n-1," ",s["tokens"][n-1]," ",s["tags"][n-1]," ",decoded[n-1])
 
-for k in reversed(range(0,n-2)):
+for k in reversed(range(0,n-2+1)):
     print(k+1," ",s["tokens"][k+1]," ",s["tags"][k+1]," ",decoded[k+1])
     decoded[k] = bp [ (k+2, decoded[k+1], decoded[k+2] ) ]
         
