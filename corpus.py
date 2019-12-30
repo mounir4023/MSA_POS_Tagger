@@ -143,8 +143,8 @@ decoded = ['*' for i in range(0,s["len"]) ]
 for i in range(0,s["len"]):
     print("Position ",i," /",n)
 
-    for u in possible_tags(i):
-        for v in possible_tags(i-1):
+    for v in possible_tags(i-1):
+        for u in possible_tags(i):
 
             w = possible_tags(i-2)[0]
             pi[ (i,v,u) ] = pi [ (i-1,w,v) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
