@@ -90,6 +90,9 @@ fd_ends_bigram = nltk.FreqDist(all_ends_bigram)
 def emission(t, w):
     return fd_emissions[(t,w)] / fd_tags[t]
 
+def uni_transition(t):
+    return fd_words.freq(t)
+
 def bi_transition(prev, t):
     if prev == '*':
         return fd_starts[t] / corpus_size
@@ -123,10 +126,11 @@ def possible_tags(k):
     if k == -1 or k == -2:
         return ['*']
     else: 
-        return list(set(all_tags))
+        #return list(set(all_tags))
+        return [ sents[0]["tags"][k] ]
 
 # init
-s = sents[100]
+s = sents[0]
 pi = { (-1,'*','*'): 1 }
 bp = { }
 n = s["len"]-1
@@ -140,12 +144,14 @@ for i in range(0,s["len"]):
 
             w = possible_tags(i-2)[0]
             #pi[ (i,v,u) ] = pi [ (i-1,w,v) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
-            pi[ (i,v,u) ] = random.uniform(0,0.001) * random.uniform(1,10)
+            pi[ (i,v,u) ] = pi [ (i-1,w,v) ] * emission(u,s["tokens"][i])
+            #pi[ (i,v,u) ] = random.uniform(0,0.001) * random.uniform(1,10)
             bp[ (i,v,u) ] = w
 
             for w in possible_tags(i-2)[1:]:
                 #tmp = pi [ (i-1,v,w) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
-                tmp = random.uniform(0,0.001) * random.uniform(1,10)
+                tmp = pi [ (i-1,v,w) ] * emission(u,s["tokens"][i])
+                #tmp = random.uniform(0,0.001) * random.uniform(1,10)
                 if tmp > pi [ (i,v,u) ] :
                     pi[ (i,v,u) ] = tmp
                     bp[ (i,v,u) ] = w
@@ -155,7 +161,6 @@ for u in possible_tags(n):
     
     v = possible_tags(n-1)[0]
     max_uv_end = pi[ (n,v,u) ] * tri_transition(v,u,'STOP')
-    #max_uv_end = random.uniform(0,0.001) * random.uniform(1,10)
     decoded[n] = u
     if n>0:
         decoded[n-1] = v
@@ -190,6 +195,9 @@ for k in reversed(range(0,n-2+1)):
 
 
 """
+    #max_uv_end = random.uniform(0,0.001) * random.uniform(1,10)
+
+
 for s in sents[:10]:
  p = tri_transition( '*','*',s["tags"][0] ) * emission( s["tags"][0] , s["tokens"][0] ) 
  p = p *  tri_transition( '*',s["tags"][0],s["tags"][1] ) * emission( s["tags"][1] , s["tokens"][1] ) 
