@@ -115,7 +115,11 @@ def tri_transition(prevprev, prev, t):
             return 0
         return fd_trigrams[(prevprev,prev,t)] / fd_bigrams[(prevprev,prev)]
 
+f = open("trash/tags.txt","w")
+f.write(str(set(all_tags)))
+f.close()
 
+"""
 ######################  Viterbi ##########################
 
 def possible_tags(k):
@@ -174,7 +178,7 @@ for k in reversed(range(0,n-2+1)):
     decoded[k] = bp [ (k+2, decoded[k+1], decoded[k+2] ) ]
         
 
-
+"""
 
 
 
