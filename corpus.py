@@ -94,19 +94,17 @@ def bi_transition(prev, t):
         return fd_bigrams[(prev,t)] / fd_tags[prev]
 
 def tri_transition(prevprev, prev, t):
-  try:
-    if prev == '*':
-        return fd_starts[t] / corpus_size
-    elif prevprev == '*':
-        return fd_starts_bigram[(prev,t)] / len(all_starts_bigram) 
-    elif t == 'STOP':
-        return fd_ends_bigram[(prevprev,prev)] / fd_bigrams[(prevprev,prev)]
-    else:
-        #if fd_trigrams[(prevprev,prev,t)] == 0:
-        #    return 0
-        return fd_trigrams[(prevprev,prev,t)] / fd_bigrams[(prevprev,prev)]
-  except ZeroDivisionError :
-        return 0
+    #try:
+        if prev == '*':
+            return fd_starts[t] / corpus_size
+        elif prevprev == '*':
+            return fd_starts_bigram[(prev,t)] / len(all_starts_bigram) 
+        elif t == 'STOP':
+            return fd_ends_bigram[(prevprev,prev)] / fd_bigrams[(prevprev,prev)]
+        else:
+            return fd_trigrams[(prevprev,prev,t)] / fd_bigrams[(prevprev,prev)]
+    #except ZeroDivisionError :
+        #return 0
 
 
 # Viterbi
@@ -141,9 +139,7 @@ for i in range(0,s["len"]):
                 #tmp = pi [ (i-1,v,w) ] * emission(u,s["tokens"][i])
                 #print( pi [ (i,v,u) ] ," ", tmp )
                 if tmp > pi [ (i,v,u) ] :
-                    #print("entered")
-                    if tmp>0:
-                        print(tmp)
+                    #print(tmp>0)
                     pi[ (i,v,u) ] = tmp
                     bp[ (i,v,u) ] = w
 
@@ -155,6 +151,7 @@ for u in possible_tags(n):
     if n>0:
         decoded[n-1] = v
 
+    print(max_uv_end, decoded)
     # chech n>0 here too
     for v in possible_tags(n-1)[1:]:
         tmp = pi[ (n,v,u) ] * tri_transition(v,u,'STOP')
@@ -163,6 +160,7 @@ for u in possible_tags(n):
             decoded[n] = u
             if n>0:
                 decoded[n-1] = v
+        print(max_uv_end, decoded)
 
 print(n," ",s["tokens"][n]," ",s["tags"][n]," ",decoded[n])
 print(n-1," ",s["tokens"][n-1]," ",s["tags"][n-1]," ",decoded[n-1])
