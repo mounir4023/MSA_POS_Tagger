@@ -126,10 +126,8 @@ def possible_tags(k):
     if k == -1 or k == -2:
         return ['*']
     else: 
-        return list(set(all_tags))
-        #return [ sents[0]["tags"][k] ]
-        #return [ tag for tag in list(set(all_tags)) if emission(tag,s["tokens"][k]) > 0 ]
-
+        #return list(set(all_tags))
+        return [ sents[0]["tags"][k] ]
 
 # init
 s = sents[0]
@@ -140,20 +138,19 @@ decoded = ['*' for i in range(0,s["len"]) ]
 
 # decoding
 for i in range(0,s["len"]):
-    print("Position ",i," /",n)
 
     for u in possible_tags(i):
         for v in possible_tags(i-1):
 
             w = possible_tags(i-2)[0]
-            pi[ (i,v,u) ] = pi [ (i-1,w,v) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
-            #pi[ (i,v,u) ] = pi [ (i-1,w,v) ] * emission(u,s["tokens"][i])
+            #pi[ (i,v,u) ] = pi [ (i-1,w,v) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
+            pi[ (i,v,u) ] = pi [ (i-1,w,v) ] * emission(u,s["tokens"][i])
             #pi[ (i,v,u) ] = random.uniform(0,0.001) * random.uniform(1,10)
             bp[ (i,v,u) ] = w
 
             for w in possible_tags(i-2)[1:]:
-                tmp = pi [ (i-1,v,w) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
-                #tmp = pi [ (i-1,v,w) ] * emission(u,s["tokens"][i])
+                #tmp = pi [ (i-1,v,w) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
+                tmp = pi [ (i-1,v,w) ] * emission(u,s["tokens"][i])
                 #tmp = random.uniform(0,0.001) * random.uniform(1,10)
                 if tmp > pi [ (i,v,u) ] :
                     pi[ (i,v,u) ] = tmp
