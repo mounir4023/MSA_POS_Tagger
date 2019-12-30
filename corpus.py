@@ -149,20 +149,21 @@ for i in range(0,s["len"]):
                     bp[ (i,v,u) ] = w
 
 # Yn Yn-1 then Yi 0..n-2
+u = possible_tags(n)[0]
+v = possible_tags(n-1)[0]
+max_uv_end = pi[ (n,v,u) ] * tri_transition(v,u,'STOP')
+decoded[n] = u
+if n>0:
+    decoded[n-1] = v
+
 for u in possible_tags(n):
-    
-    v = possible_tags(n-1)[0]
-    max_uv_end = pi[ (n,v,u) ] * tri_transition(v,u,'STOP')
-    decoded[n] = u
-    if n>0:
-        decoded[n-1] = v
-        for v in possible_tags(n-1)[1:]:
-            tmp = pi[ (n,v,u) ] * tri_transition(v,u,'STOP')
-            if tmp > max_uv_end:
-                max_uv_end = tmp
-                decoded[n] = u
-                if n>0:
-                    decoded[n-1] = v
+    for v in possible_tags(n-1):
+        tmp = pi[ (n,v,u) ] * tri_transition(v,u,'STOP')
+        if tmp > max_uv_end:
+            max_uv_end = tmp
+            decoded[n] = u
+            if n>0:
+                decoded[n-1] = v
 
 
 # final test
