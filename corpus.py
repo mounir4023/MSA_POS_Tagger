@@ -37,7 +37,7 @@ for s in sents:
         print("LENGTH ERROR IN SENTENCE: ",s["num"])
 
 # global counts 
-mini_sents = sents[:100]
+mini_sents = sents[:500]
 all_words = [ ]
 all_emissions = [ ]
 all_tags = [ ]
@@ -118,7 +118,7 @@ def possible_tags(k):
 
 
 # sentence to decode
-s = sents[0]
+s = sents[100]
 
 # init
 pi = { (-1,'*','*'): 1 }
@@ -138,7 +138,12 @@ for i in range(0,s["len"]):
 
             for w in possible_tags(i-2)[1:]:
                 tmp = pi [ (i-1,v,w) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
+                #tmp = pi [ (i-1,v,w) ] * emission(u,s["tokens"][i])
+                #print( pi [ (i,v,u) ] ," ", tmp )
                 if tmp > pi [ (i,v,u) ] :
+                    #print("entered")
+                    if tmp>0:
+                        print(tmp)
                     pi[ (i,v,u) ] = tmp
                     bp[ (i,v,u) ] = w
 
@@ -167,14 +172,27 @@ for k in reversed(range(0,n-2+1)):
     decoded[k] = bp [ (k+2, decoded[k+1], decoded[k+2] ) ]
         
 
-#for i in range(0,s["len"]):
-#    print("token ",s["tokens"][i]," original ",s["tags"][i], " predicted ",decoded[i])
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 """
+#for i in range(0,s["len"]):
+#    print("token ",s["tokens"][i]," original ",s["tags"][i], " predicted ",decoded[i])
+
+
+
 for t in list(tag_set):
     try:
         print(tri_transition(t,'PUNC','STOP'))
