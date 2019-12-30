@@ -1,4 +1,5 @@
 from lxml import etree
+import random
 import re
 import nltk
 
@@ -98,6 +99,7 @@ def bi_transition(prev, t):
         return fd_bigrams[(prev,t)] / fd_tags[prev]
 
 def tri_transition(prevprev, prev, t):
+        return random.uniform(0,0.5)
     #try:
         if prev == '*':
             return fd_starts[t] / corpus_size
@@ -141,8 +143,8 @@ for i in range(0,s["len"]):
             bp[ (i,v,u) ] = w
 
             for w in possible_tags(i-2)[1:]:
-                #tmp = pi [ (i-1,v,w) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
-                tmp = pi [ (i-1,v,w) ] * emission(u,s["tokens"][i])
+                tmp = pi [ (i-1,v,w) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
+                #tmp = pi [ (i-1,v,w) ] * emission(u,s["tokens"][i])
                 #print( pi [ (i,v,u) ] ," ", tmp )
                 if tmp > pi [ (i,v,u) ] :
                     #print(tmp>0)
