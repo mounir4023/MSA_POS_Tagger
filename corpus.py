@@ -42,7 +42,7 @@ for s in sents:
 
 # global counts 
 #mini_sents = [ random.choice(sents) for i in range(0,500) ]
-mini_sents = sents[:200]
+mini_sents = sents[:1]
 all_words = [ ]
 all_emissions = [ ]
 all_tags = [ ]
@@ -143,8 +143,8 @@ decoded = ['*' for i in range(0,s["len"]) ]
 for i in range(0,s["len"]):
     print("Position ",i," /",n)
 
-    for v in possible_tags(i-1):
-        for u in possible_tags(i):
+    for u in possible_tags(i):
+        for v in possible_tags(i-1):
 
             w = possible_tags(i-2)[0]
             pi[ (i,v,u) ] = pi [ (i-1,w,v) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
