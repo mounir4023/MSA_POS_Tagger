@@ -138,11 +138,9 @@ def smooth_transition(prevprev, prev, t):
 
 # add 
 def smooth_emission(t,w):
-    # if word in corpus use default emission
-    # elif word in lexicon use 1 to use with each possible tag
-    # else smooth_emission(t, 'UNK')
     if w in forget_words:
-        return 1
+        #return 1
+        return emission(t, 'UNK')
     else:
         return emission(t,w)
 
@@ -206,6 +204,7 @@ def viterbi(s):
 # test
 s = random.choice(sents)
 s["decoded"] = viterbi(s)
+print("phrase: ",s["num"])
 for i in range(0,s["len"]):
     if s["tokens"][i] in forget_words:
         print(s["tokens"][i],"\t",s["tags"][i],"\t",s["decoded"][i],"\t*UNK Word*")
