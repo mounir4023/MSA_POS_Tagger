@@ -169,11 +169,11 @@ def viterbi(s):
             for v in possible_tags(i-1):
 
                 w = possible_tags(i-2)[0]
-                pi[ (i,v,u) ] = pi [ (i-1,w,v) ] * tri_transition(w,v,u) * smooth_emission(u,s["tokens"][i])
+                pi[ (i,v,u) ] = pi [ (i-1,w,v) ] * smooth_transition(w,v,u) * smooth_emission(u,s["tokens"][i])
                 bp[ (i,v,u) ] = w
 
                 for w in possible_tags(i-2)[1:]:
-                    tmp = pi [ (i-1,w,v) ] * tri_transition(w,v,u) * smooth_emission(u,s["tokens"][i])
+                    tmp = pi [ (i-1,w,v) ] * smooth_transition(w,v,u) * smooth_emission(u,s["tokens"][i])
                     if tmp > pi [ (i,v,u) ] :
                         pi[ (i,v,u) ] = tmp
                         bp[ (i,v,u) ] = w
