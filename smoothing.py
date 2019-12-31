@@ -39,9 +39,23 @@ for s in sents:
     else:
         print("LENGTH ERROR IN SENTENCE: ",s["num"])
 
-# global counts 
-#mini_sents = [ random.choice(sents) for i in range(0,200) ]
-mini_sents = sents[:]
+# forgetting rare words
+#sents = [ random.choice(sents) for i in range(0,200) ]
+sents = sents[:200]
+all_words = [ ]
+forget_words = [ ]
+
+for s in sents:
+    for w in s["tokens"]:
+        all_words.append(w)
+fd_words = nltk.FreqDist(all_words)
+
+for item in fd_words.items():
+    if item[1]<2:
+        forget_words.append(item[0])
+
+
+# counts 
 all_words = [ ]
 all_emissions = [ ]
 all_tags = [ ]
@@ -51,9 +65,11 @@ all_starts = [ ]
 all_ends = [ ]
 all_starts_bigram = [ ]
 all_ends_bigram = [ ]
-for s in mini_sents:
+for s in sents:
     for i in range(0,s["len"]):
         w = s["tokens"][i]
+        if w in forget_words:
+            w = 'UNK'
         t = s["tags"][i]
         all_words.append( w )
         all_emissions.append( (t,w) )
@@ -86,19 +102,15 @@ fd_starts_bigram = nltk.FreqDist(all_starts_bigram)
 fd_ends_bigram = nltk.FreqDist(all_ends_bigram)
 
 # smoothing
-sup = 0
-inf = 0
+unk_freq = 0
 for item in fd_words.items():
-    if item[1] > 1:
-        sup += 1
-    else :
-        inf +=1
+    if item[1] == 1:
+        unk_freq += 1
 
-print("words appearing >1 times: ",sup)
-print("words appearing  1 time : ",inf)
+print(unk_freq)
+
+
     
-
-"""
 ######################  HMM  ##########################
 
 def emission(t, w):
@@ -129,6 +141,15 @@ def tri_transition(prevprev, prev, t):
             return 0
         return fd_trigrams[(prevprev,prev,t)] / fd_bigrams[(prevprev,prev)]
 
+def smooth_transition(prevprev, prev, t):
+    return 0.01 + 0.09 * uni_transition(t) + 0.2 * bi_transition(prev,t) + 0.7 * tri_transition(prevprev,prev,t)
+
+def smooth_emission(t,w):
+    # if word in corpus use default emission
+    # elif word in lexicon use 1 to use with each possible tag
+    # else smooth_emission(t, 'UNK')
+    return 
+
 
 ######################  Viterbi ##########################
 
@@ -138,55 +159,92 @@ def possible_tags(k):
     else: 
         return list(set(all_tags))
 
-# init
-s = random.choice(mini_sents)
-#s = sents[4023]
-pi = { (-1,'*','*'): 1 }
-bp = { }
-n = s["len"]-1
-decoded = ['*' for i in range(0,s["len"]) ]
+#s = random.choice(sents)
+def viterbi(s):
 
-# decoding
+    #init 
+    pi = { (-1,'*','*'): 1 }
+    bp = { }
+    n = s["len"]-1
+    decoded = ['*' for i in range(0,s["len"]) ]
+
+    # decoding
+    for i in range(0,s["len"]):
+
+        for u in possible_tags(i):
+            for v in possible_tags(i-1):
+
+                w = possible_tags(i-2)[0]
+                pi[ (i,v,u) ] = pi [ (i-1,w,v) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
+                bp[ (i,v,u) ] = w
+
+                for w in possible_tags(i-2)[1:]:
+                    tmp = pi [ (i-1,w,v) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
+                    if tmp > pi [ (i,v,u) ] :
+                        pi[ (i,v,u) ] = tmp
+                        bp[ (i,v,u) ] = w
+
+    # Yn Yn-1 then Yi 0..n-2
+    u = possible_tags(n)[0]
+    v = possible_tags(n-1)[0]
+    max_uv_end = pi[ (n,v,u) ] * tri_transition(v,u,'STOP')
+    decoded[n] = u
+    if n>0:
+        decoded[n-1] = v
+
+    for u in possible_tags(n):
+        for v in possible_tags(n-1):
+            tmp = pi[ (n,v,u) ] * tri_transition(v,u,'STOP')
+            if tmp > max_uv_end:
+                max_uv_end = tmp
+                decoded[n] = u
+                if n>0:
+                    decoded[n-1] = v
+
+    for k in reversed(range(0,n-2+1)):
+        decoded[k] = bp [ (k+2, decoded[k+1], decoded[k+2] ) ]
+
+    return decoded
+        
+
+# test
+s = random.choice(sents)
+s["decoded"] = viterbi(s)
 for i in range(0,s["len"]):
-    print("Position ",i," /",n)
-
-    for u in possible_tags(i):
-        for v in possible_tags(i-1):
-
-            w = possible_tags(i-2)[0]
-            pi[ (i,v,u) ] = pi [ (i-1,w,v) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
-            bp[ (i,v,u) ] = w
-
-            for w in possible_tags(i-2)[1:]:
-                tmp = pi [ (i-1,w,v) ] * tri_transition(w,v,u) * emission(u,s["tokens"][i])
-                if tmp > pi [ (i,v,u) ] :
-                    pi[ (i,v,u) ] = tmp
-                    bp[ (i,v,u) ] = w
-
-# Yn Yn-1 then Yi 0..n-2
-u = possible_tags(n)[0]
-v = possible_tags(n-1)[0]
-max_uv_end = pi[ (n,v,u) ] * tri_transition(v,u,'STOP')
-decoded[n] = u
-if n>0:
-    decoded[n-1] = v
-
-for u in possible_tags(n):
-    for v in possible_tags(n-1):
-        tmp = pi[ (n,v,u) ] * tri_transition(v,u,'STOP')
-        if tmp > max_uv_end:
-            max_uv_end = tmp
-            decoded[n] = u
-            if n>0:
-                decoded[n-1] = v
+    print(s["tokens"][i],"\t",s["tags"][i],s["decoded"][i])
 
 
-# final test
+
+
+"""
+# smoothing
+
+smooth_fd_words = nltk.FreqDist()
+smooth_fd_words['UNK'] = 0
+for item in fd_words.items():
+    if item[1]>1:
+        smooth_fd_words[item[0]] = item[1]
+    else:
+        smooth_fd_words['UNK'] += item[1]
+
+print(smooth_fd_words['UNK'])
+
+
+sup = 0
+inf = 0
+for item in fd_words.items():
+    if item[1] > 1:
+        sup += 1
+    else :
+        inf +=1
+
+print("words appearing >1 times: ",sup)
+print("words appearing  1 time : ",inf)
+
+
+
 print(n," ",s["tokens"][n]," ",s["tags"][n]," ",decoded[n])
 for k in reversed(range(0,n-2+1)):
     print(k+1," ",s["tokens"][k+1]," ",s["tags"][k+1]," ",decoded[k+1])
     decoded[k] = bp [ (k+2, decoded[k+1], decoded[k+2] ) ]
-        
-
-
 """
