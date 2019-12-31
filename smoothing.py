@@ -101,14 +101,6 @@ fd_ends = nltk.FreqDist(all_ends)
 fd_starts_bigram = nltk.FreqDist(all_starts_bigram)
 fd_ends_bigram = nltk.FreqDist(all_ends_bigram)
 
-# smoothing
-unk_freq = 0
-for item in fd_words.items():
-    if item[1] == 1:
-        unk_freq += 1
-
-print(unk_freq)
-
 
     
 ######################  HMM  ##########################
@@ -144,11 +136,15 @@ def tri_transition(prevprev, prev, t):
 def smooth_transition(prevprev, prev, t):
     return 0.01 + 0.09 * uni_transition(t) + 0.2 * bi_transition(prev,t) + 0.7 * tri_transition(prevprev,prev,t)
 
+# add 
 def smooth_emission(t,w):
     # if word in corpus use default emission
     # elif word in lexicon use 1 to use with each possible tag
     # else smooth_emission(t, 'UNK')
-    return 1
+    if w in forget_words:
+        return 1
+    else:
+        return emission(t,w)
 
 
 ######################  Viterbi ##########################
@@ -247,4 +243,10 @@ print(n," ",s["tokens"][n]," ",s["tags"][n]," ",decoded[n])
 for k in reversed(range(0,n-2+1)):
     print(k+1," ",s["tokens"][k+1]," ",s["tags"][k+1]," ",decoded[k+1])
     decoded[k] = bp [ (k+2, decoded[k+1], decoded[k+2] ) ]
+
+
+def smooth_emission(t,w):
+    # if word in corpus use default emission
+    # elif word in lexicon use 1 to use with each possible tag
+    # else smooth_emission(t, 'UNK')
 """
