@@ -185,7 +185,7 @@ def possible_tags(k):
 def viterbi(s, model):
 
     #init 
-    transition = model["tri_transition"]
+    transition = model["tri_transition"] # key error with smooth trans
     emission = model["smooth_emission"]
     pi = { (-1,'*','*'): 1 }
     bp = { }
