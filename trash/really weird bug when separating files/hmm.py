@@ -112,7 +112,7 @@ def get_HMM( train_set ):
         #temporary use forget words instead of lexicon
         "forget_words": [ w for w in forget_words ],
         #tmp
-        "all_tags": [ t for t in fd_tags.keys() ]
+        "all_tags": [ t in fd_tags.keys() ]
     }
 
     for w in fd_words.keys():
