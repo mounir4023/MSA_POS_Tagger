@@ -23,16 +23,19 @@ def diagnose_batch(batch, model):
     
     for s in batch:
         s["decoded"] = decode_sentence(s, model)
-        for i in range(0, s["len"])
+        for i in range(0, s["len"]):
             answer_count += 1
             if s["tags"][i] != s["decoded"][i]:
                 error_count += 1
-                wrong_answers.append( (s["tags"][i],s["decoded"]) )
+                wrong_answers.append( (s["tags"][i],s["decoded"][i]) )
                 wrong_tags.append( s["tags"][i] )
                 wrong_words.append( s["tokens"][i] )
             else:
                 correct_count += 1
-                
+        
+    return wrong_answers, wrong_tags, wrong_words, answer_count, correct_count
+          
+    """
     return {
             "wrong_answers": wrong_answers,
             "wrong_tags": wrong_tags,
@@ -40,17 +43,19 @@ def diagnose_batch(batch, model):
             "answer_count": answer_count,
             "correct_count": correct_count,
         }
+    """
 
 # evaluate a model on a set
 def eval_model(batch, model):
     
-    diag = diagnose_batch(batch,model)
+    #diag = diagnose_batch(batch,model)
+    wrong_answers, wrong_tags, wrong_words, answer_count, correct_count = diagnose_batch(batch, model)
     
     return {
-            "accuracy": diag["correct_count"]/diag["answer_count"] * 100,
-            "confusion" : nltk.ConditionalFreqDist(diag["wrong_answers"]),
-            "worst_tags": sorted([item[0] for item in nltk.FreqDist(wrong_tags).items()], lambda=item:item[1], reverse=True)[:10],
-            "worst_words": sorted([item[0] for item in nltk.FreqDist(wrong_tokens).items()], lambda=item:item[1], reverse=True)[:10],
+            "accuracy": correct_count/ answer_count * 100,
+            "confusion" : nltk.ConditionalFreqDist( (correct,wrong) for (correct,wrong) in wrong_answers ),
+            "worst_tags": sorted([item for item in nltk.FreqDist(wrong_tags).items()], key = lambda item:item[1], reverse=True)[:10],
+            "worst_words": sorted([item for item in nltk.FreqDist(wrong_words).items()], key = lambda item:item[1], reverse=True)[:10],
         }
     
     
