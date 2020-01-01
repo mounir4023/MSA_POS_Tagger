@@ -150,6 +150,9 @@ model = {
     "tri_transition": {},
     "smooth_transition": {},
     "smooth_emission": {},
+    #"lexicon": import_lexicon(),
+    #temporary use forget words instead of lexicon
+    "forget_words": [ w for w in forget_words ],
 }
 
 for w in fd_words.keys():
@@ -182,11 +185,20 @@ def possible_tags(k):
         #return pos_lexicon[w]
         return list(set(all_tags))
 
+def viterbi_transition(prevprev, prev, t , model):
+    return model["tri_transition"][(prevprev,prev,t)]
+    #return model["smooth_transition"][(prevprev,prev,t)]
+
+def viterbi_emission(t, w, model):
+    if w in model["forget_words"]:
+        return model["emission"][(t,'UNK')]
+    else:
+        return model["emission"][(t,w)]
+    
+
 def viterbi(s, model):
 
     #init 
-    transition = model["tri_transition"] # key error with smooth trans
-    emission = model["smooth_emission"]
     pi = { (-1,'*','*'): 1 }
     bp = { }
     n = s["len"]-1
@@ -199,7 +211,7 @@ def viterbi(s, model):
             for v in possible_tags(i-1):
 
                 w = possible_tags(i-2)[0]
-                pi[ (i,v,u) ] = pi [ (i-1,w,v) ] * transition[(w,v,u)] * emission[(u,s["tokens"][i])]
+                pi[ (i,v,u) ] = pi [ (i-1,w,v) ] * viterbi_transition(w,v,u)] * viterbi_emission(u, s["tokens"][i], model)
                 bp[ (i,v,u) ] = w
 
                 for w in possible_tags(i-2)[1:]:
@@ -232,8 +244,8 @@ def viterbi(s, model):
         
 
 # test
-#s = random.choice(train_set)
-s = sents[4023]
+s = random.choice(train_set)
+#s = sents[4023]
 s["decoded"] = viterbi(s, model)
 print("phrase: ",s["num"])
 for i in range(0,s["len"]):
