@@ -244,8 +244,7 @@ def viterbi(s, model):
         
 
 # test
-s = random.choice(sents[:400])
-#s = random.choice(train_set)
+s = random.choice(train_set)
 #s = sents[4023]
 print("phrase: ",s["num"])
 s["decoded"] = viterbi(s, model)
