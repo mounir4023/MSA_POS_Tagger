@@ -45,7 +45,7 @@ for s in sents:
 
 # forgetting rare words
 #train_set = [ random.choice(sents) for i in range(0,200) ]
-train_set = sents[:]
+train_set = sents[:3000]
 all_words = [ ]
 forget_words = [ ]
 
