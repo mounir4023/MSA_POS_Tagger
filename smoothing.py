@@ -45,7 +45,7 @@ for s in sents:
 
 # forgetting rare words
 #train_set = [ random.choice(sents) for i in range(0,200) ]
-train_set = sents[:3000]
+train_set = sents[:200]
 all_words = [ ]
 forget_words = [ ]
 
@@ -244,10 +244,11 @@ def viterbi(s, model):
         
 
 # test
-s = random.choice(train_set)
+s = random.choice(sents[:400])
+#s = random.choice(train_set)
 #s = sents[4023]
-s["decoded"] = viterbi(s, model)
 print("phrase: ",s["num"])
+s["decoded"] = viterbi(s, model)
 for i in range(0,s["len"]):
     if s["tokens"][i] in forget_words:
         print("*UNK*\t",s["tokens"][i],"\t",s["tags"][i],"\t",s["decoded"][i])
