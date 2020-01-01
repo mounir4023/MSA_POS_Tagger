@@ -149,11 +149,13 @@ model = {
     "bi_transition": {},
     "tri_transition": {},
     "smooth_transition": {},
+    "smooth_emission": {},
 }
 
 for w in fd_words.keys():
     for t in fd_tags.keys():
         model["emission"][(t,w)] = emission(t,w)
+        model["smooth_emission"][(t,w)] = emission(t,w)
         model["uni_transition"][t] = uni_transition(t)
 
 dest = [ t for t in fd_tags.keys() ]
@@ -180,9 +182,11 @@ def possible_tags(k):
         #return pos_lexicon[w]
         return list(set(all_tags))
 
-def viterbi(s):
+def viterbi(s, model):
 
     #init 
+    transition = model["tri_transition"]
+    emission = model["smooth_emission"]
     pi = { (-1,'*','*'): 1 }
     bp = { }
     n = s["len"]-1
@@ -195,11 +199,11 @@ def viterbi(s):
             for v in possible_tags(i-1):
 
                 w = possible_tags(i-2)[0]
-                pi[ (i,v,u) ] = pi [ (i-1,w,v) ] * tri_transition(w,v,u) * smooth_emission(u,s["tokens"][i])
+                pi[ (i,v,u) ] = pi [ (i-1,w,v) ] * transition[(w,v,u)] * emission[(u,s["tokens"][i])]
                 bp[ (i,v,u) ] = w
 
                 for w in possible_tags(i-2)[1:]:
-                    tmp = pi [ (i-1,w,v) ] * tri_transition(w,v,u) * smooth_emission(u,s["tokens"][i])
+                    tmp = pi [ (i-1,w,v) ] * transition[(w,v,u)] * emission[(u,s["tokens"][i])]
                     if tmp > pi [ (i,v,u) ] :
                         pi[ (i,v,u) ] = tmp
                         bp[ (i,v,u) ] = w
@@ -207,13 +211,13 @@ def viterbi(s):
     # Yn Yn-1 
     u = possible_tags(n)[0]
     v = possible_tags(n-1)[0]
-    max_uv_end = pi[ (n,v,u) ] * tri_transition(v,u,'STOP')
+    max_uv_end = pi[ (n,v,u) ] * transition[(v,u,'STOP')]
     decoded[n] = u
     if n>0:
         decoded[n-1] = v
     for u in possible_tags(n):
         for v in possible_tags(n-1):
-            tmp = pi[ (n,v,u) ] * tri_transition(v,u,'STOP')
+            tmp = pi[ (n,v,u) ] * transition[(v,u,'STOP')]
             if tmp > max_uv_end:
                 max_uv_end = tmp
                 decoded[n] = u
@@ -227,11 +231,10 @@ def viterbi(s):
     return decoded
         
 
-"""
 # test
 #s = random.choice(train_set)
 s = sents[4023]
-s["decoded"] = viterbi(s)
+s["decoded"] = viterbi(s, model)
 print("phrase: ",s["num"])
 for i in range(0,s["len"]):
     if s["tokens"][i] in forget_words:
@@ -239,6 +242,7 @@ for i in range(0,s["len"]):
     else:
         print("     \t",s["tokens"][i],"\t",s["tags"][i],"\t",s["decoded"][i])
 
+"""
 """
 
 
