@@ -1,6 +1,6 @@
 import re
 changed_tags1=dict()
-f=open('hasDifferent.txt')
+f=open('MSA_POS_Tagger/PosLexicon_Pretraitement/hasDifferent.txt')
 for line in f:
     arr=line.split(":")
     tag=re.sub(r' ','',arr[0])
@@ -56,8 +56,8 @@ def newTags(s):
     
 
 
-new_pos_lexicon=open("PosLexicon_new.txt","w")
-pos=open('POSLexicon.txt', encoding='windows-1256')
+new_pos_lexicon=open("MSA_POS_Tagger/PosLexicon_Pretraitement/PosLexicon_new.txt","w")
+pos=open('MSA_POS_Tagger/PosLexicon_Pretraitement/POSLexicon.txt', encoding='windows-1256')
 
 for line in pos:
     splitted=line.split()
