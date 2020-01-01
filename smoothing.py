@@ -45,7 +45,7 @@ for s in sents:
 
 # forgetting rare words
 #train_set = [ random.choice(sents) for i in range(0,200) ]
-train_set = sents[:200]
+train_set = sents[:]
 all_words = [ ]
 forget_words = [ ]
 
@@ -140,8 +140,7 @@ def smooth_emission(t,w):
     if w in forget_words:
         return emission(t, 'UNK')
     else:
-        return 1
-        #return emission(t,w)
+        return emission(t,w)
 
 # training
 model = {
@@ -151,19 +150,26 @@ model = {
     "tri_transition": {},
     "smooth_transition": {},
 }
+
 for w in fd_words.keys():
     for t in fd_tags.keys():
         model["emission"][(t,w)] = emission(t,w)
         model["uni_transition"][t] = uni_transition(t)
 
-for t in ['STOP', fd_tags.keys()]:
-    for prev in [ '*', fd_tags.keys() ]:
+dest = [ t for t in fd_tags.keys() ]
+dest.append('STOP')
+source = [ t for t in fd_tags.keys() ]
+source.append('*')
+
+for t in dest:
+    for prev in source:
         model["bi_transition"][(prev,t)] = bi_transition(prev,t)
 
-for t in ['STOP', fd_tags.keys()]:
-    for prev in [ '*', fd_tags.keys() ]:
-        for prevprev in [ '*', fd_tags.keys() ]:
+for t in dest:
+    for prev in source:
+        for prevprev in source:
             model["tri_transition"][(prevprev,prev,t)] = tri_transition(prevprev,prev,t)
+            model["smooth_transition"][(prevprev,prev,t)] = smooth_transition(prevprev,prev,t)
 
 ######################  Viterbi ##########################
 
@@ -221,6 +227,7 @@ def viterbi(s):
     return decoded
         
 
+"""
 # test
 #s = random.choice(train_set)
 s = sents[4023]
@@ -232,6 +239,7 @@ for i in range(0,s["len"]):
     else:
         print("     \t",s["tokens"][i],"\t",s["tags"][i],"\t",s["decoded"][i])
 
+"""
 
 
 
