@@ -1,4 +1,4 @@
-from corpus import get_data #,get_lexicon
+from corpus import get_data ,get_lexicon
 from hmm import get_HMM
 from viterbi import decode
 import random
@@ -6,7 +6,8 @@ import random
 # test
 #train_set = [ random.choice(sents) for i in range(0,200) ]
 train_set = get_data("corpus.xml")[:200]
-model = get_HMM(train_set)
+lexicon = get_lexicon("lexicon.txt")
+model = get_HMM(train_set, lexicon)
 
 s = random.choice(train_set)
 #s = sents[4023]

@@ -46,7 +46,24 @@ def get_data( path ):
 
 ##### preparing lexicon into dict
 
-# def get_lexicon( path ):
+def get_lexicon( path ):
+    
+    lexicon = { }
+    lines = open("lexicon.txt").readlines()
+    for l in lines:
+        l = re.sub(r'\s+',' ',l)
+        l = l.split(' ')
+        for t in l:
+            if t == '':
+                l.remove(t)
+        lexicon[l[0]] = [ ]
+        for t in l[1:]:
+            lexicon[l[0]].append(t)
+            
+    return lexicon
+
+
+
 
 
 

@@ -9,17 +9,22 @@ def possible_tags(k ,s , model):
         return ['*']
     else: 
         #return pos_lexicon[w]
-        return model["all_tags"]
+        #return model["all_tags"]
+        w = s["tokens"][k]
+        if w in model["lexicon_words"]:
+            return model["lexicon"][w]
+        else:
+            return model["all_tags"]
 
 def viterbi_transition(prevprev, prev, t , model):
-    return model["tri_transition"][(prevprev,prev,t)]
-    #return model["smooth_transition"][(prevprev,prev,t)]
+    #return model["tri_transition"][(prevprev,prev,t)]
+    return model["smooth_transition"][(prevprev,prev,t)]
 
 def viterbi_emission(t, w, model):
-    if w in model["forget_words"]:
-        return model["emission"][(t,'UNK')]
-    else:
+    if w in model["corpus_words"]:
         return model["emission"][(t,w)]
+    else:
+        return model["emission"][(t,'UNK')]
     
 def decode(s, model):
 

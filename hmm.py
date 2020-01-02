@@ -6,7 +6,7 @@ import nltk
 
 ##### training an HMM on data
 
-def get_HMM( train_set ):
+def get_HMM( train_set , lexicon ):
     
     # define formulas
 
@@ -108,11 +108,12 @@ def get_HMM( train_set ):
         "bi_transition": {},
         "tri_transition": {},
         "smooth_transition": {},
-        #"lexicon": import_lexicon(),
-        #temporary use forget words instead of lexicon
+
         "forget_words": [ w for w in forget_words ],
-        #tmp
-        "all_tags": [ t for t in fd_tags.keys() ]
+        "corpus_words": all_words,
+        "lexicon": lexicon,
+        "lexicon_words": [ w for w in lexicon.keys() ],
+        "all_tags": list(set( [ t for item in lexicon.items() for t in item[1] ] )),
     }
 
     for w in fd_words.keys():
