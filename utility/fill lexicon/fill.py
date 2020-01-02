@@ -4,8 +4,6 @@ import re
 import nltk
 
 
-######################## DATA ##########################
-
 # reading corpus from xml
 root = etree.parse("corpus.xml")
 sents = [ ]
@@ -64,20 +62,47 @@ f = open("corpus_lexicon.txt","w")
 f.write(content)
 f.close()
 
+# SAIE based lexicon
+saie_lex = { }
+lines = open("poor_lexicon.txt").readlines()
+for l in lines:
+    l = re.sub(r'\s+',' ',l)
+    l = l.split(' ')
+    for t in l:
+        if t == '':
+            l.remove(t)
+    saie_lex[l[0]] = [ ]
+    for t in l[1:]:
+        saie_lex[l[0]].append(t)
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+for item in saie_lex.items():
+    if item[1][-1] == '':
+        print(item)
+        """
+
+
+
+"""
 for item in corpus_lex.items():
     if len(item[1])>1:
         print(item)
-
-
-# opening lexicon
-lines = open("poor_lexicon.txt").readlines()
-
-# lexicon to dict
-
-
-
+"""
 
 
 
