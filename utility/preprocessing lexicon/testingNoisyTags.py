@@ -7,7 +7,7 @@ import nltk
 ######################## DATA ##########################
 
 # reading corpus from xml
-root = etree.parse("MSA_POS_Tagger/corpus.xml")
+root = etree.parse("corpus.xml")
 sents = [ ]
 
 # xml to dict for each sentence 

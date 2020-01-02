@@ -39,10 +39,42 @@ for s in sents:
     else:
         print("LENGTH ERROR IN SENTENCE: ",s["num"])
 
+# corpus based lexicon
+corpus_lex = { }
+tested_words = [ ]
+for s in sents:
+    for i in range(0,s["len"]):
+        w = s["tokens"][i]
+        t = s["tags"][i]
+        if w in tested_words:
+            if t not in corpus_lex[w]:
+                corpus_lex[w].append(t)
+        else:
+            tested_words.append(w)
+            corpus_lex[w] = [t]
+
+# export corpus lexicon
+content = ""
+for item in corpus_lex.items():
+    content += item[0]+" "
+    for t in item[1]:
+        content += t+" "
+    content +="\n"
+f = open("corpus_lexicon.txt","w")
+f.write(content)
+f.close()
+
+
+
+for item in corpus_lex.items():
+    if len(item[1])>1:
+        print(item)
+
 
 # opening lexicon
-l = open("poor_lexicon.txt",encoding="cp1256").read()
-print(l)
+lines = open("poor_lexicon.txt").readlines()
+
+# lexicon to dict
 
 
 
