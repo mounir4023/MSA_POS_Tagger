@@ -5,7 +5,7 @@ import random
 
 # test
 #train_set = [ random.choice(sents) for i in range(0,200) ]
-train_set = get_data("corpus.xml")[:200]
+train_set = get_data("corpus.xml")[:]
 lexicon = get_lexicon("lexicon.txt")
 model = get_HMM(train_set, lexicon)
 
