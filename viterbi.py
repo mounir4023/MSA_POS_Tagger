@@ -18,7 +18,10 @@ def possible_tags(k ,s , model):
 
 def viterbi_transition(prevprev, prev, t , model):
     #return model["tri_transition"][(prevprev,prev,t)]
-    return model["smooth_transition"][(prevprev,prev,t)]
+    try:
+        return model["tri_transition"][(prevprev,prev,t)]
+    except:
+        return 0
 
 def viterbi_emission(t, w, model):
     if w in model["corpus_words"]:
