@@ -4,7 +4,7 @@ from viterbi import decode
 from evaluation import eval_model
 import random
 
-train_set = get_data("corpus.xml")[:]
+train_set = get_data("corpus.xml")[:1000]
 lexicon = get_lexicon("lexicon.txt")
 model = get_HMM(train_set, lexicon)
 
@@ -13,5 +13,5 @@ results = eval_model(train_set, model)
 print("\nworst_tags\n",results["worst_tags"])
 print("\nworst_words:\n",results["worst_words"])
 print("\nacc: ",results["accuracy"])
-#print("confusion matrix:")
-#print(results["confusion"].tabulate())
+print("confusion matrix:")
+print(results["confusion"].tabulate())
