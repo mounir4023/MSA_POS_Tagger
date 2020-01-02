@@ -24,10 +24,13 @@ def viterbi_transition(prevprev, prev, t , model):
         return 0
 
 def viterbi_emission(t, w, model):
-    if w in model["corpus_words"]:
-        return model["emission"][(t,w)]
-    else:
-        return model["emission"][(t,'UNK')]
+    try:
+        if w in model["corpus_words"]:
+            return model["emission"][(t,w)]
+        else:
+            return model["emission"][(t,'UNK')]
+    except:
+        return 0
     
 def decode(s, model):
 
