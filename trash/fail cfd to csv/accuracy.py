@@ -5,30 +5,20 @@ from evaluation import eval_model
 import random
 import csv
 
-data = random.shuffle(get_data("corpus.xml"))
-train_set = get_data("corpus.xml")[:3000]
-test_set = get_data("corpus.xml")[3000:]
+train_set = get_data("corpus.xml")[:50]
+#test_set = get_data("corpus.xml")[3000:]
 lexicon = get_lexicon("lexicon.txt")
 model = get_HMM(train_set, lexicon)
 
 results = eval_model(train_set, model)
 
-print("train set: 3000")
+print("train set: full corpus")
 print("sent acc: ",results["sent_accuracy"])
 print("     acc: ",results["accuracy"])
 
-results = eval_model(test_set, model)
-
-print("test set: 1000")
-print("sent acc: ",results["sent_accuracy"])
-print("     acc: ",results["accuracy"])
-
-"""
-#import pandas as pd
-tmp = pd.DataFrame(results["confusion"])
-#print(results["confusion"].items())
-print(tmp)
-"""
+with open("confusion.csv","w") as confusion:
+    writer = csv.writer(confusion, quoting=csv.QUOTE_ALL)
+    writer.writerows(results["confusion"].items())
 
 """
 #print("\nworst_tags\n",results["worst_tags"])
