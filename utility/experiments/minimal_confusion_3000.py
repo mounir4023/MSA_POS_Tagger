@@ -13,18 +13,16 @@ model = get_HMM(train_set, lexicon)
 
 results = eval_model(train_set[:500], model)
 
-import pandas as pd
-df = pd.DataFrame(results["confusion"]).fillna(0)
-print(df)
-df.to_csv('confusion.csv')
-
-
-"""
 c = [ item[0] for item in results["worst_tags"][:10] ]
 s = [ item[0] for item in results["worst_codes"][:10] ]
 print(results["confusion"].tabulate( conditions = c, samples = s ) )
-"""
 
+"""
+import pandas as pd
+tmp = pd.DataFrame(results["confusion"]).fillna(0)
+#print(results["confusion"].items())
+print(tmp)
+"""
 """
 print("train set: 3000")
 print("sent acc: ",results["sent_accuracy"])
@@ -35,6 +33,7 @@ results = eval_model(test_set, model)
 print("test set: 1000")
 print("sent acc: ",results["sent_accuracy"])
 print("     acc: ",results["accuracy"])
+
 """
 
 """
