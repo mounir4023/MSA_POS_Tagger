@@ -77,7 +77,6 @@ for l in lines:
 
 
 # merge the two lexicons
-
 lexicon = { }
 for item in saie_lex.items():
     lexicon[item[0]] = [ t for t in item[1] ]
@@ -91,13 +90,45 @@ for item in corpus_lex.items():
         tmp = [ t for t in lexicon[item[0]] ]
         for t in item[1]:
             if not t in tmp:
-                print(item[0], t)
                 tmp.append(t)
         lexicon[item[0]] = tmp
 
+# export rich lexicon
+content = ""
+for item in lexicon.items():
+    content += item[0]+" "
+    for t in item[1]:
+        content += t+" "
+    content +="\n"
+f = open("rich_lexicon.txt","w")
+f.write(content)
+f.close()
 
 
+# comparing between lexicons
+words = 0
+tags = 0
+for item in corpus_lex.items():
+    words += 1
+    for t in item[1]:
+        tags +=1
+print("Corpus lexicon\twords: ",words,"\ttags: ",tags)
 
+words = 0
+tags = 0
+for item in saie_lex.items():
+    words += 1
+    for t in item[1]:
+        tags +=1
+print("  saie lexicon\twords: ",words,"\ttags: ",tags)
+
+words = 0
+tags = 0
+for item in lexicon.items():
+    words += 1
+    for t in item[1]:
+        tags +=1
+print("  rich lexicon\twords: ",words,"\ttags: ",tags)
 
 
 
