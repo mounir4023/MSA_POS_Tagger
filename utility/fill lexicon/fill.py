@@ -77,10 +77,24 @@ for l in lines:
 
 
 # merge the two lexicons
+
+lexicon = { }
+for item in saie_lex.items():
+    lexicon[item[0]] = [ t for t in item[1] ]
+
 for item in corpus_lex.items():
-    if not item[0] in saie_lex.keys():
-        print(item[0])
-    #for t in item[1]:
+    
+    if not item[0] in lexicon.keys():
+        lexicon[item[0]] = [ t for t in item[1] ]
+    
+    else:
+        tmp = [ t for t in lexicon[item[0]] ]
+        for t in item[1]:
+            if not t in tmp:
+                print(item[0], t)
+                tmp.append(t)
+        lexicon[item[0]] = tmp
+
 
 
 
