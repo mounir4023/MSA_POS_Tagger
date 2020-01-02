@@ -76,6 +76,12 @@ for l in lines:
         saie_lex[l[0]].append(t)
 
 
+# merge the two lexicons
+for item in corpus_lex.items():
+    if not item[0] in saie_lex.keys():
+        print(item[0])
+    #for t in item[1]:
+
 
 
 
