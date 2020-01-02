@@ -17,8 +17,8 @@ def possible_tags(k ,s , model):
             return model["all_tags"]
 
 def viterbi_transition(prevprev, prev, t , model):
-    #return model["tri_transition"][(prevprev,prev,t)]
     try:
+        return model["smooth_transition"][(prevprev,prev,t)]
         return model["tri_transition"][(prevprev,prev,t)]
     except:
         return 0
