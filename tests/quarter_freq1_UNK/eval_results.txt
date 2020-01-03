@@ -3,8 +3,8 @@ EVALUATION FOR HALF OF CORPUS WORDS APPEARING ONLY ONCE TURNED INTO UNK TOKEN
 ################# TRAININ EVALUATION ################
 
 
-sent acc:  67.12121212121212
-     acc:  96.34390375968171
+sent acc:  67.24242424242424
+     acc:  96.35802905101585
 
 Common confusions:
 
@@ -12,7 +12,7 @@ Common confusions:
 SUFF_F_S_NOMIN            225              0              0             52              0              0              0              0              0              0 
 SUFF_F_S_ACCUS            169             62              0              0              0              0              0              0              0              0 
           NOUN              0              0            114              0              0              2              2              0              0              0 
- SUFF_F_S_GTIV              0             55              0             58              0              0              0              0              0              0 
+ SUFF_F_S_GTIV              0             55              0             59              0              0              0              0              0              0 
   NOUN_MS_GTIV              0              0              0              0              0              0             12              0             14              0 
  NOUN_MS_ACCUS              0              0              0              0              0             28             33              0              0              0 
  NOUN_MS_NOMIN              0              0              0              0              0              7              0              0             27              0 
@@ -26,20 +26,20 @@ None
 ################# TEST EVALUATION ################
 
 
-sent acc:  9.860935524652339
-     acc:  64.73201281677832
+sent acc:  9.608091024020228
+     acc:  64.08389163996505
 
 Common confusions:
 
                        NOUN        PVERB     SUFF_F_S        IVERB          ADJ        PNOUN     SUFF_F_P SUFF_SUBJALL          IV2         PREP 
-  NOUN_MS_GTIV          424          175            0           98           24           40            0            0            0            2 
- SUFF_F_S_GTIV            0            0          384            0            0            0            0            0           10            2 
-          NOUN            0          180            0           64          128           31            0            0            0            0 
-          PREP           10           94            0          134            8            0            0            0            0            0 
- NOUN_MS_NOMIN          114           30            0           11            6            3            0            0            0            0 
-   NOUN_P_GTIV          157            8            0            3            1            5            0            0            0            0 
+  NOUN_MS_GTIV          439          181            0          101           30           40            0            0            0            2 
+ SUFF_F_S_GTIV            0            0          407            0            0            0            0            0           10            2 
+          NOUN            0          190            0           64          131           31            0            0            0            0 
+          PREP           10           94            0          144            8            0            0            0            0            0 
+ NOUN_MS_NOMIN          116           35            0           12            6            3            0            0            0            0 
+   NOUN_P_GTIV          158            8            0            3            1            5            0            0            0            0 
      IVERB_IND            5          133            0           41            0            0            0            0            0            0 
- NOUN_MS_ACCUS           57           55            0           10            4           13            0            0            0            0 
-SUFF_F_S_ACCUS            0            0          109            0            0            0            0            0            3            0 
-SUFF_F_S_NOMIN            0            0           82            0            0            0            0            0            7            1 
+ NOUN_MS_ACCUS           64           55            0           10            4           13            0            0            0            0 
+SUFF_F_S_ACCUS            0            0          117            0            0            0            0            0            3            0 
+SUFF_F_S_NOMIN            0            0           87            0            0            0            0            0            7            1 
 None
