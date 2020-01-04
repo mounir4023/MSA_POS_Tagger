@@ -1,0 +1,43 @@
+################# TRAININ EVALUATION ################
+
+
+sent acc:  64.42424242424242
+     acc:  95.9248534501024
+
+Common confusions:
+
+                SUFF_F_S_GTIV            ADJ SUFF_F_S_NOMIN SUFF_F_S_ACCUS  SUFF_F_P_GTIV  NOUN_MS_NOMIN   NOUN_MS_GTIV  NOUN_MS_ACCUS  SUFF_M_P_GTIV           NOUN 
+SUFF_F_S_NOMIN            267              0              0             45              0              0              0              0              0              0 
+SUFF_F_S_ACCUS            183              0             73              0              0              0              0              0              0              0 
+          NOUN              0            121              0              0              0              2              2              0              0              0 
+  NOUN_MS_GTIV              0              0              0              0              0             21              0             22              0              1 
+ SUFF_F_S_GTIV              0              0             40             42              0              0              0              0              0              3 
+ NOUN_MS_ACCUS              0              0              0              0              0             37             27              0              0              1 
+ NOUN_MS_NOMIN              0              0              0              0              0              0             13             29              0              2 
+SUFF_F_P_NOMIN              0              0              0              0             39              0              0              0              0              0 
+           ADJ              0              0              0              0              0              0              0              0              0             39 
+SUFF_F_P_ACCUS              0              0              0              0             33              0              0              0              0              0 
+None
+
+
+
+################# TEST EVALUATION ################
+
+
+sent acc:  13.90644753476612
+     acc:  80.33061462277891
+
+Common confusions:
+
+                        NOUN         PVERB           ADJ         IVERB      SUFF_F_S SUFF_F_S_GTIV  NOUN_MS_GTIV         IV3FS NOUN_MS_ACCUS NOUN_MS_NOMIN 
+  NOUN_MS_GTIV           140            64            11            34             0             0             0             0            31            34 
+          NOUN             0            42           113            21             0             0             8             0             2            10 
+ SUFF_F_S_GTIV             0             0             0             0            97             0             0             0             0             0 
+ NOUN_MS_ACCUS            40            14             0             2             0             0            33             0             0            22 
+ NOUN_MS_NOMIN            53            14             4             3             0             0            30             0            22             0 
+SUFF_F_S_NOMIN             0             0             0             0            22            86             0             0             0             0 
+SUFF_F_S_ACCUS             0             0             0             0            27            60             0             0             0             0 
+          PREP             6            23             2            41             0             0             1             0             0             0 
+   NOUN_P_GTIV            32             7             0             0             0             0             1             0             0             0 
+     IVERB_IND             1            47             0            10             0             0             4             0             2             0 
+None
