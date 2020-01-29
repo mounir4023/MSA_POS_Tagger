@@ -51,14 +51,16 @@ fuse_n_lexicons( [l1,l2,l3,l4] , lfusion)
 
 #### SPLITING AND MERGIN CORPORAS TEST ####
 
-split_factor = 2
+split_factor = 3
 split_data("corporas/corpus.xml",split_factor)
 
 corporas_dir = "corporas/"
 c1 = corporas_dir + "corpus_part1.xml"
 c2 = corporas_dir + "corpus_part2.xml"
+#fuse_corporas(c1,c2,cfusion)
 cfusion = corporas_dir + "fusion.xml"
-fuse_corporas(c1,c2,cfusion)
+c3 = corporas_dir + "corpus_part3.xml"
+fuse_n_corporas( [c1,c2,c3], cfusion)
 
 #### TEST THE FINAL FUSION ON TAGGING TASK ####
 data = get_data(cfusion)

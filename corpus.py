@@ -111,6 +111,18 @@ def fuse_corporas( c1 , c2, name ):
     
     return os.path.getsize(c1), os.path.getsize(c2), os.path.getsize(name)
     
+# merge n corporas into one new file
+def fuse_n_corporas( corporas, name ):
+    
+    if len(corporas) <= 1:
+        return
+
+    fuse_corporas(corporas[0],corporas[1],name)    
+    for c in corporas[2:]:
+        fuse_corporas(c,name,name)
+
+
+
     
 
 ############ LEXICON ############
