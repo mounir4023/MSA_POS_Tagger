@@ -6,8 +6,9 @@ import os
 import math
 
 
-##### preparing data into dict
+############ CORPUS ############
 
+#read data into dict
 def get_data( path ):
     
     # init
@@ -45,32 +46,76 @@ def get_data( path ):
             
     return sents
 
+# split corpus file into n parts files
 def split_data ( path , n ):
     
-    data = random.shuffle(get_data(path))
+    #data = random.shuffle(get_data(path))
+    data = get_data(path)
     size = math.floor( len(data) / n )
     
     for i in range(0,n):
         start = i*(size)
         end = (i+1)*size
         if i == n-1:
-            l = data[start:]
-        else :
-            l = data[start:end]
-        name = re.sub(".txt","_part"+(i+1)+".txt",path)
-        content = ""
-        for item in l.items():
-            content += item[0]+" "
-            for t in item[1]:
-                content += t+" "
-            content +="\n"
+            sents = data[start:]
+        else:
+            sents = data[start:end]
+        name = re.sub(".xml","_part"+str(i+1)+".xml",path)
+        content = "<?xml version='1.0' encoding='utf-8'?>\n<CORPUS>\n"
+        for sent in sents:
+            content +="<Phrase>\n"
+            content +="<Num_phrase>"+sent["num"]+"</Num_phrase>\n"
+            content +="<Text>"+sent["raw"]+"</Text>\n"
+            content +="<Tokenisation>"+" ".join(sent["tokens"])+"</Tokenisation>\n"
+            content +="<POS_Tag>NULL "+" ".join(sent["tags"])+"\n</POS_Tag>\n"
+            content +="<Nb_Mot>"+str(len(sent["tokens"][1:]))+"</Nb_Mot>\n"
+            content +="<Nb_Token>"+str(len(sent["tags"][1:]))+"</Nb_Token>\n"
+            content +="</Phrase>\n"
+        content += "</CORPUS>"
         f = open(name,"w")
         f.write(content)
         f.close()
 
+# merge 2 corporas into one new file
+def fuse_corporas( c1 , c2, name ):
+    
+    corpus1 = get_data(c1)
+    corpus2 = get_data(c2)
+    
+    sents = [ sent["raw"] for sent in corpus1 ]
+    for sent in corpus2:
+        if sent["raw"] not in sents:
+            corpus1.append(sent)
+            
+    fusion = sorted(corpus1, key = lambda sent : int(sent["num"]))
+            
+    content = "<?xml version='1.0' encoding='utf-8'?>\n<CORPUS>\n"
+    for sent in fusion:
+        content += "<Phrase>\n"
+        content +="<Num_phrase>"+sent["num"]+"</Num_phrase>\n"
+        content +="<Text>"+sent["raw"]+"</Text>\n"
+        content +="<Tokenisation>"+" ".join(sent["tokens"])+"</Tokenisation>\n"
+        content +="<POS_Tag>NULL "+" ".join(sent["tags"])+"\n</POS_Tag>\n"
+        content +="<Nb_Mot>"+str(len(sent["tokens"][1:]))+"</Nb_Mot>\n"
+        content +="<Nb_Token>"+str(len(sent["tags"][1:]))+"</Nb_Token>\n"
+        content +="</Phrase>\n"
+    content += "</CORPUS>"
+    f = open(name,"w")
+    f.write(content)
+    f.close()
+    
+    print("\n\n Corporas fusion: \n")
+    print("size of corpus1 :", os.path.getsize(c1))
+    print("size of corpus2 :", os.path.getsize(c2))
+    print("size of fusion   :", os.path.getsize(name))
+    
+    return os.path.getsize(c1), os.path.getsize(c2), os.path.getsize(name)
+    
+    
 
-##### preparing lexicon into dict
+############ LEXICON ############
 
+# read lexicon into dict
 def get_lexicon( path ):
     
     lexicon = { }
@@ -87,6 +132,7 @@ def get_lexicon( path ):
             
     return lexicon
 
+# split lexicon file into n parts files
 def split_lexicon( path , n ):
     
     lexicon = get_lexicon(path)
@@ -115,8 +161,7 @@ def split_lexicon( path , n ):
         f.write(content)
         f.close()
         
-    
-
+# merge 2 lexicons into one new file
 def fuse_lexicons( l1 , l2, name ):
     
     # read the first lexicon
@@ -173,6 +218,7 @@ def fuse_lexicons( l1 , l2, name ):
     f.write(content)
     f.close()
     
+    """
     print("\n\n Lexicons fusion: \n")
     print("size of lexicon1 :", os.path.getsize(l1))
     print("size of lexicon2 :", os.path.getsize(l2))
@@ -181,11 +227,20 @@ def fuse_lexicons( l1 , l2, name ):
     print("lines of lexicon1 :", len(lexicon1) )
     print("lines of lexicon2 :", len(lexicon2) )
     print("lines of fusion   :", len(fusion) )
+    """
     
     return os.path.getsize(l1), os.path.getsize(l2), os.path.getsize(name)
         
         
-
+# merge 2 lexicons into one new file
+def fuse_n_lexicons( lexicons, name ):
+    
+    f = open(name,"w")
+    f.write("")
+    f.close()
+    
+    for l in lexicons:
+        fuse_lexicons(l,name,name)
 
 
 

@@ -27,34 +27,44 @@ def tokenize( sentence ):
 
 def tag ( sentence, model ):
     
-    token = tokenize(sentence)
+    tokens = tokenize(sentence)
     s = { "len": len(tokens), "tokens":tokens, "raw": sentence }
     s["decoded"] = decode(s, model)
     return s
 
-split_factor = 3
+
+
+#### SPLITING AND MERGIN LEXICONS TEST ####
+
+split_factor = 4
 split_lexicon("lexicons/lexicon.txt",split_factor)
 
 lexicons_dir = "lexicons/"
 l1 = lexicons_dir + "lexicon_part1.txt"
 l2 = lexicons_dir + "lexicon_part2.txt"
+#fuse_lexicons(l1,l2,lfusion)
+l3 = lexicons_dir + "lexicon_part3.txt"
+l4 = lexicons_dir + "lexicon_part4.txt"
 lfusion = lexicons_dir + "fusion.txt"
+fuse_n_lexicons( [l1,l2,l3,l4] , lfusion)
 
-fuse_lexicons(l1,l2,lfusion)
 
-"""
+#### SPLITING AND MERGIN CORPORAS TEST ####
+
+split_factor = 2
+split_data("corporas/corpus.xml",split_factor)
+
 corporas_dir = "corporas/"
-c1 = corporas_dir + "corpus1.xml"
-c2 = corporas_dir + "corpus2.xml"
+c1 = corporas_dir + "corpus_part1.xml"
+c2 = corporas_dir + "corpus_part2.xml"
 cfusion = corporas_dir + "fusion.xml"
-
 fuse_corporas(c1,c2,cfusion)
 
+#### TEST THE FINAL FUSION ON TAGGING TASK ####
 data = get_data(cfusion)
 lexicon = get_lexicon(lfusion)
 model = get_HMM(data,lexicon)
 
-print("tokenizing 'صباح الخير يا أصحاب'")
-print(tokenize('صباح الخير يا أصحاب'))
-print(reversed(tag('صباح الخير يا أصحاب')))
-"""
+#print("tokenizing 'صباح الخير يا أصحاب'")
+#print(tokenize('صباح الخير يا أصحاب'))
+#print([ t for t in reversed(tag('صباح الخير يا أصحاب',model)) ] )
