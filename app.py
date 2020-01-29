@@ -5,11 +5,7 @@ import os
 import re
 import random
 
-def retrain_model( dir ):
-    #for file in dir: create one corpus file having containing them all
-    #get_data (that new file)
-    return
-    
+
 def tokenize( sentence ):
     
     os.chdir('api')
@@ -36,5 +32,29 @@ def tag ( sentence, model ):
     s["decoded"] = decode(s, model)
     return s
 
+split_factor = 3
+split_lexicon("lexicons/lexicon.txt",split_factor)
+
+lexicons_dir = "lexicons/"
+l1 = lexicons_dir + "lexicon_part1.txt"
+l2 = lexicons_dir + "lexicon_part2.txt"
+lfusion = lexicons_dir + "fusion.txt"
+
+fuse_lexicons(l1,l2,lfusion)
+
+"""
+corporas_dir = "corporas/"
+c1 = corporas_dir + "corpus1.xml"
+c2 = corporas_dir + "corpus2.xml"
+cfusion = corporas_dir + "fusion.xml"
+
+fuse_corporas(c1,c2,cfusion)
+
+data = get_data(cfusion)
+lexicon = get_lexicon(lfusion)
+model = get_HMM(data,lexicon)
+
 print("tokenizing 'صباح الخير يا أصحاب'")
 print(tokenize('صباح الخير يا أصحاب'))
+print(reversed(tag('صباح الخير يا أصحاب')))
+"""

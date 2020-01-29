@@ -39,7 +39,8 @@ def get_HMM( train_set , lexicon ):
             return fd_trigrams[(prevprev,prev,t)] / fd_bigrams[(prevprev,prev)]
 
     def smooth_transition(prevprev, prev, t):
-        return 0.01 + 0.09 * uni_transition(t) + 0.2 * bi_transition(prev,t) + 0.7 * tri_transition(prevprev,prev,t)
+        return 0.1 * uni_transition(t) + 0.35 * bi_transition(prev,t) + 0.55 * tri_transition(prevprev,prev,t)
+        #return 0.01 + 0.09 * uni_transition(t) + 0.2 * bi_transition(prev,t) + 0.7 * tri_transition(prevprev,prev,t)
     
 
     # UNK, forgetting rare words
