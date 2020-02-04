@@ -1,0 +1,45 @@
+EVALUATION FOR HALF OF CORPUS WORDS APPEARING ONLY ONCE TURNED INTO UNK TOKEN
+
+################# TRAININ EVALUATION ################
+
+
+sent acc:  67.03030303030303
+     acc:  96.339195329237
+
+Common confusions:
+
+                SUFF_F_S_GTIV SUFF_F_S_NOMIN            ADJ SUFF_F_S_ACCUS  SUFF_F_P_GTIV   NOUN_MS_GTIV  NOUN_MS_NOMIN  SUFF_M_P_GTIV  NOUN_MS_ACCUS          IV3FS 
+SUFF_F_S_NOMIN            226              0              0             52              0              0              0              0              0              0 
+SUFF_F_S_ACCUS            168             63              0              0              0              0              0              0              0              0 
+          NOUN              0              0            115              0              0              2              2              0              0              0 
+ SUFF_F_S_GTIV              0             55              0             59              0              0              0              0              0              0 
+  NOUN_MS_GTIV              0              0              0              0              0              0             12              0             14              0 
+ NOUN_MS_ACCUS              0              0              0              0              0             28             34              0              0              0 
+ NOUN_MS_NOMIN              0              0              0              0              0              7              0              0             27              0 
+           IV2              0              0              0              0              0              0              0              0              0             35 
+  SUFF_SUBJ_1S              0              0              0              0              0              0              0              0              0              0 
+SUFF_F_P_NOMIN              0              0              0              0             28              0              0              0              0              0 
+None
+
+
+
+################# TEST EVALUATION ################
+
+
+sent acc:  9.860935524652339
+     acc:  64.14943198368773
+
+Common confusions:
+
+                       NOUN        PVERB     SUFF_F_S        IVERB          ADJ        PNOUN     SUFF_F_P SUFF_SUBJALL          IV2         PREP 
+  NOUN_MS_GTIV          438          180            0           98           30           40            0            0            0            2 
+ SUFF_F_S_GTIV            0            0          406            0            0            0            0            0           10            2 
+          NOUN            0          190            0           64          130           31            0            0            0            0 
+          PREP           10           94            0          144            8            0            0            0            0            0 
+ NOUN_MS_NOMIN          115           30            0           11            6            3            0            0            0            0 
+   NOUN_P_GTIV          160            8            0            3            1            5            0            0            0            0 
+     IVERB_IND            5          133            0           41            0            0            0            0            0            0 
+ NOUN_MS_ACCUS           63           55            0           10            4           13            0            0            0            0 
+SUFF_F_S_ACCUS            0            0          116            0            0            0            0            0            3            1 
+SUFF_F_S_NOMIN            0            0           96            0            0            0            0            0            7            0 
+None

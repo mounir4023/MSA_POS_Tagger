@@ -1,0 +1,18 @@
+
+
+sent acc:  64.0
+     acc:  95.64856336156785
+
+Common confusions:
+                SUFF_F_S_GTIV SUFF_F_S_NOMIN SUFF_F_S_ACCUS            ADJ  NOUN_MS_NOMIN  SUFF_SUBJ_ALL  NOUN_MS_ACCUS   NOUN_MS_GTIV    NOUN_P_GTIV SUFF_F_P_ACCUS 
+SUFF_F_S_NOMIN             37              0             10              0              0              0              0              0              0              0 
+SUFF_F_S_ACCUS             28             18              0              0              0              0              0              0              0              0 
+ SUFF_F_S_GTIV              0             11             10              0              0              0              0              0              0              0 
+          NOUN              0              0              0             19              0              0              0              0              0              0 
+  NOUN_MS_GTIV              0              0              0              0              4              0              2              0              0              0 
+ NOUN_MS_ACCUS              0              0              0              0              6              0              0              3              0              0 
+ NOUN_MS_NOMIN              0              0              0              0              0              0              5              1              0              0 
+  SUFF_SUBJ_1S              0              0              0              0              0              9              0              0              0              0 
+  NOUN_P_NOMIN              0              0              0              0              0              0              0              0              5              0 
+SUFF_F_P_NOMIN              0              0              0              0              0              0              0              0              0              4 
+None

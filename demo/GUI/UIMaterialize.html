@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>TALN</title>
+  <script src="jquery.min.js"></script>
+  
+  <script src="vue.js"></script>
+  <script src="Chart.min.js"></script>
+  <script src="utils.js"></script>
+  <script type="text/javascript" src="eel.js"></script>
+  <link rel="stylesheet" href="materialize.min.css">
+  
+                    <!-- Compiled and minified JavaScript -->
+                    <script src="materialize.min.js"></script>
+</head>
+<body  style="background-image: linear-gradient(to right, rgba(255,0,0,0), #3e8f6981);">
+  
+            <div id="app">         
+              <div id="modalCorpus" class="modal">
+                <div class="modal-content">
+                  <h4>Warning</h4>
+                  <p>Are you sure you want to delete the Corpus</p>
+                </div>
+                <div class="modal-footer">
+                  <a href="#!" onclick="app.DelCorpus()" class="modal-close waves-effect waves-green btn-flat">Yes I Do</a>
+                  <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
+                </div>
+              </div>
+              
+              <div id="modalCorpusMerge" class="modal">
+                <div class="modal-content">
+                  <h4>Merging Corporas</h4>
+                  <div class="row">
+                    <div class="col s12">
+                      
+                      <label class="col s12" v-for="l in CorpusData">
+                        <input v-bind:id="l" type="checkbox"  class="corpcheck" >{{l}}</input>
+                        <span id="ttt" >{{ l }}</span>
+                      </label>
+                      <input  id="FusNameCorpus" type="text" class="validate">
+                    </div>
+                 
+                </div>
+                </div>
+                <div class="modal-footer">
+                  <a href="#!" onclick="app.MergeCorporas()" class="modal-close waves-effect waves-green btn-flat">YMerge</a>
+                  <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
+                </div>
+              </div>
+              <div id="modalLexiconMerge" class="modal">
+                <div class="modal-content">
+                  <h4>Merging Lexicons</h4>
+                  <div class="row">
+                    <div class="col s12">
+                      
+                      <label class="col s12" v-for="l in LexiconData">
+                        <input v-bind:id="l" type="checkbox"  class="lexcheck" >{{l}}</input>
+                        <span id="ttt" >{{ l }}</span>
+                      </label>
+                      <input  id="FusName" type="text" class="validate">
+                    </div>
+                 
+                </div>
+                </div>
+                <div class="modal-footer">
+                  <a href="#!" onclick="app.MergeLexicons()" class="modal-close waves-effect waves-green btn-flat">YMerge</a>
+                  <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
+                </div>
+              </div>
+              <div id="modalLexiconSplit" class="modal">
+                <div class="modal-content">
+                  <h4>Split Lexicon</h4>
+                  <p>How Many Parts Do You Want To Split Your Lexicon Into ? </p>
+                  <div class="input-field col s12">
+                    <input  id="NumSplitLexicon" type="number" class="validate">
+                    <label for="first_name">Number</label>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <a href="#!" onclick="app.SplitLexicon()" class="modal-close waves-effect waves-green btn-flat">Split</a>
+                  <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
+                </div>
+              </div>
+              <div id="modalCorpusSplit" class="modal">
+                <div class="modal-content">
+                  <h4>Split Corpus</h4>
+                  <p>How Many Parts Do You Want To Split Your Corpus Into ? </p>
+                  <div class="input-field col s12">
+                    <input  id="NumSplitCorpus" type="number" class="validate">
+                    <label for="first_name">Number</label>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <a href="#!" onclick="app.SplitCorpus()" class="modal-close waves-effect waves-green btn-flat">Split</a>
+                  <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
+                </div>
+              </div>
+              <div id="modalLexicon" class="modal">
+                <div class="modal-content">
+                  <h4>Warning</h4>
+                  <p>Are you sure you want to delete the Lexicon</p>
+                </div>
+                <div class="modal-footer">
+                  <a href="#!" onclick="app.DelLexic()" class="modal-close waves-effect waves-green btn-flat">Yes I Do</a>
+                  <a href="#!" class="modal-close waves-effect waves-green btn-flat">No</a>
+               
+                </div>
+              </div>
+  <nav>
+        <div class="nav-wrapper black" style="background-image: linear-gradient(to left, rgba(255,0,0,0), #3e8f69);">
+          <a href="#" class="brand-logo">Arabic Pos-Tagger</a>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+             <ul class="tabs transparent center"   >
+               
+              <li class="tab col s6 "><a class="white-text" href="#TaggerText">Tagger-Text</a></li>
+              <li class="tab col s6 "><a class="white-text" href="#TaggerAdmin">Admin</a></li>
+               
+                
+       
+      
+                    
+          </ul>
+           
+                 </ul>
+        </div>
+       
+            </nav>
+            <div id="TaggerAdmin">
+              
+                <ul class="tabs transparent" style="background-image: linear-gradient(to right, rgb(0, 0, 0), #3e8f6931);"   >
+                  <li class="tab col s6 "><a class="white-text" href="#Corpora">Corpora</a></li>
+                  <li class="tab col s6 "><a class="white-text" href="#Lexicons">Lexicons</a></li>
+                  
+                  
+         
+        
+                      
+            </ul>
+            <div id="Corpora">
+              <div class="row">
+                <div class=" col s4">
+                  <div class="card">
+                  <div class="card-content black-text">
+                    <span class="card-title">Corpus List</span>
+                    <div id="CorpusData" class="collection">
+                      <a v-for='c in CorpusData' href="#!" id="Corpus1"   onclick="app.SelectCorpus(this)" class="collection-item corpus ">{{c}}</a>
+                      
+                    </div>
+                  </div>
+                  <div class="card-action">
+                    <a onclick="app.DeleteCorpus()" class="modal-trigger" href="#modalCorpus">Delete</a>
+                    <a  class="modal-trigger" href="#modalCorpusSplit" href="#">Split</a>
+                    <a class="modal-trigger"  href="#modalCorpusMerge" href="#">Merge</a>
+
+                  </div>
+                   
+                </div>
+                  
+                </div>
+               
+
+                <div class="card z-depth-1 col s8">
+                  <span class="card-title" id="CorpusTitle">TALAA--POS</span>
+                
+                <div  class="card-content">
+                  <div class="row">
+                     
+                        <div class="input-field col s12">
+                          <textarea  style="height: 300px;max-height: 500px;" id="textareaCorpus" style="text-align: right;" class="materialize-textarea"></textarea>
+                          <label for="textareaCorpus"></label>
+                        </div>
+                  </div>
+                  
+                </div>
+                <div class="card-action center">
+                  
+                  <a href="#">Save</a>
+                </div>
+              </div>
+           
+          </div>  
+              </div>
+              <div id="Lexicons">
+                <div class="row">
+                  <div class=" col s4">
+                    <div class="card">
+                    <div class="card-content black-text">
+                      <span class="card-title">Storage</span>
+                      <div  id="LexxiconData"  class="collection">
+                        <a v-for="l in LexiconData" href="#!"  onclick="app.SelectLexicon(this)" class="collection-item Lexicon">{{ l }}</a>
+                        
+                      </div>
+                    </div>
+                    <div class="card-action">
+                      <a  class="modal-trigger" href="#modalLexicon">Delete</a>
+                      <a  class="modal-trigger" href="#modalLexiconSplit">Split</a>
+                      <a  class="modal-trigger" href="#modalLexiconMerge">Merge</a>
+  
+                    </div>
+                     
+                  </div>
+                    
+                  </div>
+                  
+                <div class="card z-depth-1 col s8">
+                  <span class="card-title" id="LexiconTitle">TALAA--POS</span>
+                
+                <div  class="card-content">
+                  <div class="row">
+                     
+                        <div class="input-field col s12">
+                          <textarea  style="height: 300px;max-height: 500px;" id="textareaLexicon" style="text-align: right;" class="materialize-textarea"></textarea>
+                          <label for="textareaLexicon"></label>
+                        </div>
+                  </div>
+                  
+                </div>
+                <div class="card-action center">
+                  
+                  <a href="#">Save</a>
+                </div>
+              </div>
+                </div>
+              </div>
+         
+            
+            </div>
+            <div id="TaggerText">
+              <div class="row">
+               
+                  <div  class="col s6">
+                    <div class="card z-depth-4">
+                        <span class="card-title" ><b>Source</b></span>
+                      
+                      
+                       
+                           
+                             
+                                <textarea style="height:100px ;max-height: 150px; overflow:auto;text-align: right;" id="textarea1" class="materialize-textarea"></textarea>
+                                <label for="textarea1">ادخال النص</label>
+                              
+                        
+                      
+                      <div id="preload" class="progress" style="visibility: hidden; background-image: linear-gradient(to right, rgba(255,0,0,0), #f71212);">
+                        <div class="indeterminate" ></div>
+                    </div>
+                    
+                      
+                        <div class="card-action center">
+                          
+                          <div class="file-field input-field">
+                            <div class="btn transparent z-depth-1">
+                              <a href="#" >Import Text</a>
+                              <input id="textimport" type="file" >
+                             
+                            </div>
+                            <div class="file-path-wrapper">
+                              <input class="file-path validate" type="text">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card-action center">
+                          <div class="input-field col s12">
+                            <select id="Corpuses">
+                              
+                            <option disabled selected  value="" >Choose your Lexicon</option>
+                              
+                            </select>
+                            <label>Corpus</label>
+                          </div>
+                          <br>
+                          <br>
+                          <div class="file-field input-field">
+                            <div class="btn transparent z-depth-1">
+                              <a href="#" >Import Corpus</a>
+                              <input id="corpusimport" type="file">
+                            </div>
+                            <div class="file-path-wrapper">
+                              <input class="file-path validate" type="text">
+                            </div>
+                            
+                          </div>
+                      
+                      </div>
+                      <div class="card-action center">
+                        <div class="input-field col s12">
+                          <select id="Lexiconss">
+                            <option value="" disabled selected>Choose your Lexicon</option>
+                            <option value="1">Rich_Lexicon</option>
+                            <option value="2">Lexicon 2</option>
+                            <option value="3">Lexicon 3</option>
+                          </select>
+                          <label>Lexicon</label>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="file-field input-field">
+                          <div class="btn transparent z-depth-1">
+                            <a href="#" >Import Lexicon</a>
+                            <input id="lexiconimport" type="file">
+                          </div>
+                          <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                          </div>
+                          
+                        </div>
+                      <a href="#" id="frff" v-on:click="Startt">Start</a>
+                    
+                    </div>
+                    </div>
+                  </div>
+                  <div class="col s6">
+                    <div class="card z-depth-1">
+                        <span class="card-title"> <b>Tagged Text<b></b></span>
+                      
+                      <div class="card-content">
+                        <div class="row">
+                           
+                              <div class="input-field col s12">
+                                <textarea id="textarea2" style="height: 500px;;text-align: right;" class="materialize-textarea"></textarea>
+                                <label for="textarea2"></label>
+                              </div>
+                        </div>
+                        
+                      </div>
+                      <div class="card-action center">
+                        <a href="#" v-on:click='UpdateText'>Update</a>
+                        <a href="#" id="export" download="../Texts/tagged.txt">Export</a>
+                        <a href="#">Re-train</a>
+                      </div>
+                    </div>
+                   
+                  </div>  
+                  
+               
+              </div>
+
+</div>
+</div>
+              </div>
+                
+                    <script>
+                       $('input[type="file"]').change(function () {
+           // var file = e.target.result,results;
+            //alert('aa')
+   /* if (file && file.length) {
+        results = file.split("\n");
+        $('#name').val(results[0]);
+        $('#age').val(results[1]);
+    }*/
+          });
+                    var app = new Vue({
+
+  el: '#app',
+  data: {
+    Results:null,
+    LexiconData:['l.txt'],
+    CorpusData:[],
+    CorpusToMerge:[],
+    LexiconToMerge:[],
+    Lexic:'',
+    Corp:''
+  },
+  mounted(){
+    eel.initt();
+  },
+  methods: {
+    chooseCorpus:function()
+    {
+      Corp=document.getElementById("Corpuses").value;
+      alert(Corp);
+
+    },
+    chooseLexic:function(e)
+    {
+      Lexic=e;
+      alert(Lexic);
+    },
+    
+    MergeCorporas:function()
+    {
+     
+      var inputElements = document.getElementsByClassName('corpcheck');
+for(var i=0; inputElements[i]; ++i){
+      if(inputElements[i].checked){
+        app.CorpusToMerge.push(inputElements[i].id);
+      }
+    }
+      alert(app.CorpusToMerge);
+      eel.MergeCorporas(app.CorpusToMerge,$('#FusNameCorpus').val());
+},
+    MergeLexicons:function()
+    {
+      
+      var inputElements = document.getElementsByClassName('lexcheck');
+for(var i=0; inputElements[i]; ++i){
+      if(inputElements[i].checked){
+        app.LexiconToMerge.push(inputElements[i].id);
+      }
+    }
+     
+      eel.MergeLexicons(app.LexiconToMerge,$('#FusName').val());
+},
+    AddLexiconToMerge:function(e)
+    {
+      e.className='';
+      app.LexiconToMerge.push(e.innerHTML);
+    },
+    SplitLexicon:function()
+    {
+      elements=document.getElementsByClassName("collection-item Lexicon active")
+   
+  
+     
+      eel.SplitLexicon(elements[0].innerHTML,$('#NumSplitLexicon').val());
+    },
+    SplitCorpus:function()
+    {
+      elements=document.getElementsByClassName("collection-item corpus active")
+   
+  
+     
+      eel.SplitCorpus(elements[0].innerHTML,$('#NumSplitCorpus').val());
+    },
+    DelLexic:function()
+    {
+      
+      elements=document.getElementsByClassName("collection-item Lexicon active")
+     /*for (let i = 0; i < elements.length; i++) {
+       eel.DeleteCorpus(elements[i].innerHTML);
+       
+     } */
+    console.log(elements);
+     eel.DeleteLexicon(elements[0].innerHTML);
+     
+      
+    },
+    DelCorpus:function()
+    {
+      
+      elements=document.getElementsByClassName("collection-item corpus active")
+     /*for (let i = 0; i < elements.length; i++) {
+       eel.DeleteCorpus(elements[i].innerHTML);
+       
+     } */
+    console.log(elements);
+     eel.DeleteCorpus(elements[0].innerHTML);
+     
+      
+    },
+  
+                    DeleteLexicon:function()
+                    {
+//alert("HHH");
+                    },
+                    ImportLexicon:function()
+                    {
+//alert("HHH");
+                    },
+CreateLexicon:function()
+{
+//alert("HHH");
+},
+
+                    DeleteCorpus:function()
+                    {
+//alert("HHH");
+                    },
+                    ImportCorpus:function()
+                    {
+//alert("HHH");
+                    },
+CreateCorpus:function()
+{
+//alert("HHH");
+},
+MergeCorpus:function()
+{
+  //alert("HHH");
+},
+    SelectLexicon:function(e)
+    {
+      
+      elements=document.getElementsByClassName("collection-item Lexicon active")
+     for (let i = 0; i < elements.length; i++) {
+       elements[i].className ="collection-item Lexicon";
+       
+     } 
+     e.className="collection-item Lexicon active";
+     
+     document.getElementById('LexiconTitle').innerHTML=e.innerHTML;
+     eel.GetLexiconContent(e.innerHTML);
+    },
+    SelectCorpus:function(e)
+    {
+      
+      elements=document.getElementsByClassName("collection-item corpus active")
+     for (let i = 0; i < elements.length; i++) {
+       elements[i].className ="collection-item corpus";
+       
+     } 
+     e.className="collection-item corpus active";
+     document.getElementById('CorpusTitle').innerHTML=e.innerHTML;
+     eel.GetCorpusContent(e.innerHTML);
+    },
+    Startt:function()
+    {
+      //alert("efe");
+      document.getElementById('preload').style.visibility='visible';
+      alert(app.Lexic+''+app.Corp);
+    eel.retrainmodel(document.getElementById("Lexiconss").value,document.getElementById("Corpuses").value);
+      eel.TagText($('#textarea1').val());
+    },
+    UpdateText:function()
+    {
+      document.getElementById('textarea2').readOnly=false;
+    }
+
+  }
+                    })
+                    eel.expose(SetLexiconContent)
+                    function SetLexiconContent(content) {
+                      
+                      document.getElementById('textareaLexicon').value=content;
+                    }
+                    eel.expose(SetCorpusContent)
+                    function SetCorpusContent(content) {
+                      //alert(content);
+                      document.getElementById('textareaCorpus').value=content;
+                    }
+                    eel.expose(SendBack)
+                    function SendBack(lc,ll) {
+                      document.getElementById('Corpuses').innerHTML="";
+                      document.getElementById('Lexiconss').innerHTML="";
+                      for (let i = 0; i < lc.length; i++) {
+                        $('#Corpuses').append("<option  value=\""+lc[i]+"\" >"+lc[i]+"</option>");
+
+                        
+                      }
+                      $('select').formSelect();
+                      for (let i = 0; i < ll.length; i++) {
+                        $('#Lexiconss').append("<option  value=\""+ll[i]+"\" >"+ll[i]+"</option>");
+
+                        
+                      }
+                      $('select').formSelect();
+                      app.LexiconData=ll;
+                       app.CorpusData=lc;
+                       $('select').formSelect();
+                      
+                      //LC=lc;
+                      //LL=ll;
+                    }
+                    eel.expose(SendRes)
+                    function SendRes(tokens,tags) {
+                     // app.Results=s;
+                     s=""
+                     document.getElementById('textarea2').readOnly=true;
+                     for (let i = 0; i  < tokens.length; i ++) {
+                        s=s+ tokens[i ];
+                        s=s+'/'+tags[i];
+                       
+                     }
+                     $('#textarea2').val(s);
+                   document.getElementById("preload").style.visibility=' hidden'
+                     //document.getElementById("export").setAttribute('download','Texts/tagged.txt');
+                      ////alert(s);
+                      //WonderFul if you
+                    }
+                    eel.expose(SendTrain)
+                    function SendTrain(tokens,tags) {
+                     // app.Results=s;
+                     s=""
+                     //document.getElementById('textarea2').readOnly=true;
+                     for (let i = 0; i  < tokens.length; i ++) {
+                        s=s+ tokens[i ];
+                        s=s+'/'+tags[i];
+                       
+                     }
+                     $('#textareaCorpus').val(s);
+                   document.getElementById("preload").style.visibility=' hidden'
+                     //document.getElementById("export").setAttribute('download','Texts/tagged.txt');
+                      ////alert(s);
+                      //WonderFul if you
+                    }
+          eel.expose(Notif)
+          function Notif(s) {
+            M.toast({html: s});
+          }
+         
+
+                        </script>
+                    <script>
+                    var randomScalingFactor = function() {
+			return Math.round(Math.random() * 100);
+		};
+
+		var config = {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: [
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+						randomScalingFactor(),
+					],
+					backgroundColor: [
+						window.chartColors.red,
+						window.chartColors.orange,
+						window.chartColors.yellow,
+						window.chartColors.green,
+						window.chartColors.blue,
+					],
+					label: 'Tagged'
+				}],
+				labels: [
+					'NOUN',
+					'Verb',
+					'ADJ',
+					'PRON',
+				]
+			},
+			options: {
+				responsive: true
+			}
+		};
+
+	
+
+		
+
+		var colorNames = Object.keys(window.chartColors);
+  
+
+var input = document.getElementById("textimport");
+var output = document.getElementById("textarea1");
+
+
+input.addEventListener("change", function () {
+
+  output = document.getElementById("textarea1");
+  if (this.files && this.files[0]) {
+    var myFile = this.files[0];
+    var reader = new FileReader();
+    var path = (window.URL || window.webkitURL).createObjectURL(myFile);
+    console.log('path', myFile.path);
+    reader.addEventListener('load', function (e) {
+      output.textContent = e.target.result; 
+       //alert("ee");
+    });
+    
+    reader.readAsBinaryString(myFile);
+  }   
+});
+
+var fileChooserlexicon = document.getElementById('lexiconimport');
+
+
+
+function waitForTextReadCompletelexicon(reader) {
+    reader.onloadend = function(event) {
+        var text = event.target.result;
+      //alert(text);
+      eel.AddLexicon(text);
+    }
+}
+
+function handleFileSelectionlexicon() {
+    var file = fileChooserlexicon.files[0],
+        reader = new FileReader();
+
+    waitForTextReadCompletelexicon(reader);
+    reader.readAsText(file);
+}
+
+fileChooserlexicon.addEventListener('change', handleFileSelectionlexicon, false);
+var fileChooser = document.getElementById('corpusimport');
+
+function parseTextAsXml(text) {
+    var parser = new DOMParser(),
+        xmlDom = parser.parseFromString(text, "text/xml");
+        
+  //alert(xmlDom["Phrase"]);
+    //now, extract items from xmlDom and assign to appropriate text input fields
+}
+
+function waitForTextReadComplete(reader) {
+    reader.onloadend = function(event) {
+        var text = event.target.result;
+      //alert(text);
+      eel.AddCorpus(text);
+        parseTextAsXml(text);
+    }
+}
+$("#Corpuses").change(function() {
+  
+  app.chooseCorpus();
+});
+$("#Lexiconss").change(function() {
+ 
+  app.chooseLexic(document.getElementById("Lexiconss").value);
+});
+function handleFileSelection() {
+    var file = fileChooser.files[0],
+        reader = new FileReader();
+
+    waitForTextReadComplete(reader);
+    reader.readAsText(file);
+}
+
+fileChooser.addEventListener('change', handleFileSelection, false);
+                    
+                          $(function () {
+                          
+                            $('.tabs').tabs();
+                            $('.modal').modal();
+                            $('select').formSelect();
+                        
+                    });
+                
+                    </script>
+                   
+                   
+                
+</body>
+</html>

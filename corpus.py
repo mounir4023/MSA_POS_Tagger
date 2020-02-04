@@ -82,6 +82,10 @@ def fuse_corporas( c1 , c2, name ):
     corpus1 = get_data(c1)
     corpus2 = get_data(c2)
     
+    print("\n\n Corporas fusion: \n")
+    print("size of corpus1 :", os.path.getsize(c1))
+    print("size of corpus2 :", os.path.getsize(c2))
+    
     sents = [ sent["raw"] for sent in corpus1 ]
     for sent in corpus2:
         if sent["raw"] not in sents:
@@ -104,9 +108,6 @@ def fuse_corporas( c1 , c2, name ):
     f.write(content)
     f.close()
     
-    print("\n\n Corporas fusion: \n")
-    print("size of corpus1 :", os.path.getsize(c1))
-    print("size of corpus2 :", os.path.getsize(c2))
     print("size of fusion   :", os.path.getsize(name))
     
     return os.path.getsize(c1), os.path.getsize(c2), os.path.getsize(name)
@@ -122,7 +123,32 @@ def fuse_n_corporas( corporas, name ):
         fuse_corporas(c,name,name)
 
 
-
+# add sent to corpous
+def embed_in_corpus(sent,tokens,tags,corpus):
+    
+    data = get_data(corpus)
+    num = len(data)
+    raw = sent
+    
+    content = "<?xml version='1.0' encoding='utf-8'?>\n<CORPUS>\n"
+    content += "<Phrase>\n"
+    content +="<Num_phrase>"+num+"</Num_phrase>\n"
+    content +="<Text>"+raw+"</Text>\n"
+    content +="<Tokenisation>"+" ".join(tokens)+"</Tokenisation>\n"
+    content +="<POS_Tag>NULL "+" ".join(tags)+"\n</POS_Tag>\n"
+    content +="<Nb_Mot>"+str(len(tokens[1:]))+"</Nb_Mot>\n"
+    content +="<Nb_Token>"+str(len(tags[1:]))+"</Nb_Token>\n"
+    content +="</Phrase>\n"
+    content += "</CORPUS>"
+    
+    f = open("corporas/tmp.xml", enconding="UTF-8")
+    f.write(content)
+    f.close()
+    
+    fuse_corporas("corporas/tmp.xml", corpus, corpus )
+    os.remove("corporas/tmp.xml")
+    
+    
     
 
 ############ LEXICON ############
@@ -230,16 +256,13 @@ def fuse_lexicons( l1 , l2, name ):
     f.write(content)
     f.close()
     
-    """
     print("\n\n Lexicons fusion: \n")
-    print("size of lexicon1 :", os.path.getsize(l1))
-    print("size of lexicon2 :", os.path.getsize(l2))
-    print("size of fusion   :", os.path.getsize(name))
-    
+    #print("size of lexicon1 :", os.path.getsize(l1))
+    #print("size of lexicon2 :", os.path.getsize(l2))
+    #print("size of fusion   :", os.path.getsize(name))
     print("lines of lexicon1 :", len(lexicon1) )
     print("lines of lexicon2 :", len(lexicon2) )
     print("lines of fusion   :", len(fusion) )
-    """
     
     return os.path.getsize(l1), os.path.getsize(l2), os.path.getsize(name)
         
